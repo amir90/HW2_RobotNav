@@ -1,0 +1,1 @@
+cmake . && make && ./PathFinder test_robot.txt test_obstacles.txt output.txt
