@@ -37,7 +37,7 @@ vector<Polygon_2> loadPolygons(ifstream &is) {
 vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon_2 &robot, vector<Polygon_2> &obstacles) {
     //todo: implement this function.
 
-    // calc minkowsky sum obstacles + robot
+    // minus robot
     Polygon_2 minus_robot;
     for (Polygon_2::Vertex_iterator vi = robot.vertices_begin(); vi != robot.vertices_end(); ++vi) {
         Kernel::FT x = vi->x(), y = vi->y();
@@ -46,8 +46,8 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     }
 
     int obstacles_size = obstacles.size();
-    // vector<Polygon_2> c_obstacles(obstacles_size);
 
+    // minkowsky sum = calc c-obstacles arrangement
     Arrangement_2 arr;
     for(int i = 0; i < obstacles_size; i++) {
         Polygon_with_holes_2  c_obstacle_with_hole  = minkowski_sum_2(obstacles[i], minus_robot);
@@ -64,11 +64,8 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
         CGAL::insert(arr, &edges[0], &edges[obs_size]);
     }
 
-    // OutputIterator decomposition;
-    // CGAL::decompose(arr, decomposition);
-
-    //trapezodial decomposition of the minkowsky-sum
-
+    //trapezodial decomposition
+    
     //create graph from decomposition
     
     // find path (bfs or Digstra for bonus) from start to end
