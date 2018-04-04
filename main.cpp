@@ -5,8 +5,27 @@
 #include <boost/timer.hpp>
 #include "CGAL_defines.h"
 #include "Path.h"
+#include <CGAL/Arr_segment_traits_2.h>
+#include <CGAL/Arrangement_2.h>
+
+
+
+
 
 using namespace std;
+
+bool InsideTriangle (Point_2 p,Point_2 t1,Point_2 t2,Point_2 t3) {
+	auto Area1 = CGAL::area(t1,p,t2); auto Area2 = CGAL::area(t2,p,t3); auto Area3 = CGAL::area(t3,p,t1);
+
+	auto Area = CGAL::area(t1,t2,t3);
+
+	if (Area==Area1+Area2+Area3) {
+		return true;
+	}
+
+	return false;
+}
+
 
 
 Point_2 loadPoint_2(std::ifstream &is) {
@@ -48,26 +67,47 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     int obstacles_size = obstacles.size();
 
     // minkowsky sum = calc c-obstacles arrangement
-    Arrangement_2 arr;
+    //Meanwhile , build a constrained triangulation - c-obstacles are the constraints
+    ConstrainedTriangulation CT;
+ //   Arrangement_2 arr;
     for(int i = 0; i < obstacles_size; i++) {
         Polygon_with_holes_2  c_obstacle_with_hole  = minkowski_sum_2(obstacles[i], minus_robot);
         CGAL_assertion (c_obstacle_with_hole.number_of_holes() == 0);
         Polygon_2 c_obstacle = c_obstacle_with_hole.outer_boundary();
-        
-        int obs_size = c_obstacle.size();
-        Segment_2 edges[obs_size];
+
+  //      int obs_size = c_obstacle.size();
+ //       Segment_2 edges[obs_size];
         int index = 0;
         for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
-            edges[index++] = *ei;
-        }
 
-        CGAL::insert(arr, &edges[0], &edges[obs_size]);
+            CT.insert_constraint(ei->source(),ei->target());
+        }
     }
 
-    //trapezodial decomposition
+    CT.insert(start);
+    CT.insert(end);
+
+    ConstrainedTriangulation::Face_handle f;
+
+    //find triangle which contains the start point
+
+    for (auto i = CT.finite_faces_begin(); i!=CT.finite_faces_end(); i++) {
+    	Triangle_2 tri = Triangle_2(i->vertex(0)->point(),i->vertex(1)->point(),i->vertex(2)->point());
+    	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+    		f=i;
+    		break;
+    	}
+
+    }
     
-    //create graph from decomposition
-    
+    //use BFS to get all connected triangles (do not cross triangles through constraint edge).
+    //use a struct which holds the triangle and a pointer to previous triangle.
+    //In case of arriving at triangle which contains the end point, use pointer to previous triangles to create the path.
+
+    std::queue<int> TriQueue;
+
+
+
     // find path (bfs or Digstra for bonus) from start to end
 
     return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});

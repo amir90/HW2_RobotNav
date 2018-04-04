@@ -1,4 +1,4 @@
-# Install script for directory: /home/nitai/workspaces/robotics/hw2
+# Install script for directory: /home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/nitai/workspaces/robotics/hw2/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

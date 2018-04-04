@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/nitai/workspaces/robotics/hw2/Path.cpp" "/home/nitai/workspaces/robotics/hw2/CMakeFiles/PathFinder.dir/Path.cpp.o"
-  "/home/nitai/workspaces/robotics/hw2/main.cpp" "/home/nitai/workspaces/robotics/hw2/CMakeFiles/PathFinder.dir/main.cpp.o"
+  "/home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/Path.cpp" "/home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/CMakeFiles/PathFinder.dir/Path.cpp.o"
+  "/home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/main.cpp" "/home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/CMakeFiles/PathFinder.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,7 +17,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/include/x86_64-linux-gnu"
+  "/usr/local/include"
   "."
   )
 
