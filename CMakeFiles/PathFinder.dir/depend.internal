@@ -478,16 +478,19 @@ CMakeFiles/PathFinder.dir/Path.cpp.o
  /usr/local/include/CGAL/Triangle_3_Triangle_3_do_intersect.h
  /usr/local/include/CGAL/Triangle_3_Triangle_3_intersection.h
  /usr/local/include/CGAL/Triangulation_2.h
+ /usr/local/include/CGAL/Triangulation_2_traits_3.h
  /usr/local/include/CGAL/Triangulation_data_structure_2.h
  /usr/local/include/CGAL/Triangulation_ds_circulators_2.h
  /usr/local/include/CGAL/Triangulation_ds_face_base_2.h
  /usr/local/include/CGAL/Triangulation_ds_iterators_2.h
  /usr/local/include/CGAL/Triangulation_ds_vertex_base_2.h
  /usr/local/include/CGAL/Triangulation_face_base_2.h
+ /usr/local/include/CGAL/Triangulation_face_base_with_info_2.h
  /usr/local/include/CGAL/Triangulation_line_face_circulator_2.h
  /usr/local/include/CGAL/Triangulation_structural_filtering_traits.h
  /usr/local/include/CGAL/Triangulation_utils_2.h
  /usr/local/include/CGAL/Triangulation_vertex_base_2.h
+ /usr/local/include/CGAL/Triangulation_vertex_base_with_info_2.h
  /usr/local/include/CGAL/Uncertain.h
  /usr/local/include/CGAL/Union_find.h
  /usr/local/include/CGAL/Unique_hash_map.h
@@ -2361,16 +2364,19 @@ CMakeFiles/PathFinder.dir/main.cpp.o
  /usr/local/include/CGAL/Triangle_3_Triangle_3_do_intersect.h
  /usr/local/include/CGAL/Triangle_3_Triangle_3_intersection.h
  /usr/local/include/CGAL/Triangulation_2.h
+ /usr/local/include/CGAL/Triangulation_2_traits_3.h
  /usr/local/include/CGAL/Triangulation_data_structure_2.h
  /usr/local/include/CGAL/Triangulation_ds_circulators_2.h
  /usr/local/include/CGAL/Triangulation_ds_face_base_2.h
  /usr/local/include/CGAL/Triangulation_ds_iterators_2.h
  /usr/local/include/CGAL/Triangulation_ds_vertex_base_2.h
  /usr/local/include/CGAL/Triangulation_face_base_2.h
+ /usr/local/include/CGAL/Triangulation_face_base_with_info_2.h
  /usr/local/include/CGAL/Triangulation_line_face_circulator_2.h
  /usr/local/include/CGAL/Triangulation_structural_filtering_traits.h
  /usr/local/include/CGAL/Triangulation_utils_2.h
  /usr/local/include/CGAL/Triangulation_vertex_base_2.h
+ /usr/local/include/CGAL/Triangulation_vertex_base_with_info_2.h
  /usr/local/include/CGAL/Uncertain.h
  /usr/local/include/CGAL/Union_find.h
  /usr/local/include/CGAL/Unique_hash_map.h

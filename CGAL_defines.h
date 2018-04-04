@@ -15,6 +15,9 @@
 #include <CGAL/minkowski_sum_2.h>
 #include <CGAL/Arrangement_2.h>
 #include <CGAL/Arr_segment_traits_2.h>
+#include <CGAL/Triangulation_2_traits_3.h>
+#include <CGAL/Triangulation_face_base_with_info_2.h>
+#include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Constrained_triangulation_2.h>
 
 typedef typename CGAL::Gmpq Number_type;
@@ -29,7 +32,11 @@ typedef typename CGAL::Polygon_with_holes_2<Kernel> Polygon_with_holes_2;
 typedef CGAL::Arr_segment_traits_2<Kernel> Traits_2;
 typedef typename CGAL::Arrangement_2<Traits_2> Arrangement_2;
 typedef CGAL::Exact_predicates_tag Itag;
-typedef typename CGAL::Constrained_triangulation_2<Kernel,CGAL::Default,Itag> ConstrainedTriangulation;
+typedef CGAL::Triangulation_vertex_base_2<Kernel>                      Vb;
+typedef CGAL::Triangulation_face_base_with_info_2<std::string,Kernel>    Fbb;
+typedef CGAL::Constrained_triangulation_face_base_2<Kernel,Fbb>        Fb;
+typedef CGAL::Triangulation_data_structure_2<Vb,Fb>               TDS;
+typedef typename CGAL::Constrained_triangulation_2<Kernel,TDS,Itag> ConstrainedTriangulation;
 
 
 #endif //INC_2_3_CGAL_DEFINES_H

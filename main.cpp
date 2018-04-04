@@ -10,6 +10,16 @@
 
 
 
+struct TriangleStruct {
+
+	ConstrainedTriangulation::Face_handle currFace;
+
+	TriangleStruct t;
+
+	bool first=true;
+
+};
+
 
 
 using namespace std;
@@ -95,6 +105,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	Triangle_2 tri = Triangle_2(i->vertex(0)->point(),i->vertex(1)->point(),i->vertex(2)->point());
     	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
     		f=i;
+
     		break;
     	}
 
@@ -104,11 +115,87 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     //use a struct which holds the triangle and a pointer to previous triangle.
     //In case of arriving at triangle which contains the end point, use pointer to previous triangles to create the path.
 
-    std::queue<int> TriQueue;
+    std::queue<TriangleStruct> TriQueue;
+
+    TriangleStruct temp;
+
+    temp.currFace=f;
+
+    f->info() = "visited";
+
+    TriQueue.push(temp);
+
+    bool foundPath = false;
+
+    while (!TriQueue.empty()) {
+    	temp = TriQueue.front();
+    	TriQueue.pop();
+
+    	temp.currFace->info() = "visited";
+
+        TriangleStruct temp2;
+
+    	//check neighboring triangles: do not cross if: 1. edge is constraint 2. edge leads to infinite face 3. face is marked as "visited"
+    	if (!(temp.currFace->is_constrained(0)) && !(temp.currFace ->neighbor(0)->info()=="visited")) {
+
+    		temp2.currFace = temp.currFace->neighbor(0)->neighbor(0);
+    		temp2.t = temp;
+    		temp2.first = false;
+    		TriQueue.push(temp2);
+
+        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
+        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        		foundPath=true;
+        		break;
+        	}
+
+    	if (!(temp.currFace->is_constrained(1)) && !(temp.currFace ->neighbor(1)->info()=="visited")) {
+
+    		temp2.currFace = temp.currFace->neighbor(1)->neighbor(1);
+    		temp2.t = temp;
+    		temp2.first = false;
+    		TriQueue.push(temp2);
+
+        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
+        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        		foundPath=true;
+        		break;
+        	}
+
+
+    	}
+    	if (!(temp.currFace->is_constrained(2)) && !(temp.currFace ->neighbor(2)->info()=="visited")) {
+
+    		temp2.currFace = temp.currFace->neighbor(2)->neighbor(2);
+    		temp2.t = temp;
+    		temp2.first = false;
+    		TriQueue.push(temp2);
+
+        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
+        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        		foundPath=true;
+        		break;
+        	}
+
+    	}
+
+    }
 
 
 
-    // find path (bfs or Digstra for bonus) from start to end
+    }
+
+    //make path
+
+    if (foundPath) {
+
+    	auto temp3 = TriQueue.front();
+
+
+    }
+
+
+   //Djikstra?
 
     return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
 }

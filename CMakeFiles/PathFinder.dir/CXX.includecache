@@ -27,6 +27,12 @@ CGAL/Arrangement_2.h
 -
 CGAL/Arr_segment_traits_2.h
 -
+CGAL/Triangulation_2_traits_3.h
+-
+CGAL/Triangulation_face_base_with_info_2.h
+-
+CGAL/Triangulation_vertex_base_with_info_2.h
+-
 CGAL/Constrained_triangulation_2.h
 -
 
@@ -5274,6 +5280,20 @@ CGAL/Triangulation_structural_filtering_traits.h
 CGAL/determinant.h
 -
 
+/usr/local/include/CGAL/Triangulation_2_traits_3.h
+CGAL/license/Triangulation_2.h
+-
+CGAL/Point_3.h
+-
+CGAL/Segment_3.h
+-
+CGAL/Triangle_3.h
+-
+CGAL/Kernel/global_functions_3.h
+-
+CGAL/triangulation_assertions.h
+-
+
 /usr/local/include/CGAL/Triangulation_data_structure_2.h
 CGAL/license/TDS_2.h
 -
@@ -5372,6 +5392,12 @@ CGAL/triangulation_assertions.h
 CGAL/Triangulation_ds_face_base_2.h
 -
 
+/usr/local/include/CGAL/Triangulation_face_base_with_info_2.h
+CGAL/license/Triangulation_2.h
+-
+CGAL/Triangulation_face_base_2.h
+-
+
 /usr/local/include/CGAL/Triangulation_line_face_circulator_2.h
 CGAL/license/Triangulation_2.h
 -
@@ -5398,6 +5424,12 @@ CGAL/license/Triangulation_2.h
 CGAL/config.h
 -
 CGAL/Triangulation_ds_vertex_base_2.h
+-
+
+/usr/local/include/CGAL/Triangulation_vertex_base_with_info_2.h
+CGAL/license/Triangulation_2.h
+-
+CGAL/Triangulation_vertex_base_2.h
 -
 
 /usr/local/include/CGAL/Uncertain.h
