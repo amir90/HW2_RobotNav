@@ -21,22 +21,7 @@ struct TriangleStruct {
 };
 
 
-
 using namespace std;
-
-bool InsideTriangle (Point_2 p,Point_2 t1,Point_2 t2,Point_2 t3) {
-	auto Area1 = CGAL::area(t1,p,t2); auto Area2 = CGAL::area(t2,p,t3); auto Area3 = CGAL::area(t3,p,t1);
-
-	auto Area = CGAL::area(t1,t2,t3);
-
-	if (Area==Area1+Area2+Area3) {
-		return true;
-	}
-
-	return false;
-}
-
-
 
 Point_2 loadPoint_2(std::ifstream &is) {
     Kernel::FT x, y;
@@ -93,13 +78,13 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
         }
     }
 
-    CT.insert(start);
+    auto vs = CT.insert(start);
     CT.insert(end);
 
     ConstrainedTriangulation::Face_handle f;
 
     //find triangle which contains the start point
-
+/*
     for (auto i = CT.finite_faces_begin(); i!=CT.finite_faces_end(); i++) {
     	Triangle_2 tri = Triangle_2(i->vertex(0)->point(),i->vertex(1)->point(),i->vertex(2)->point());
     	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
@@ -109,7 +94,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	}
 
     }
-    
+   */
     //use BFS to get all connected triangles (do not cross triangles through constraint edge).
     //use a struct which holds the triangle and a pointer to previous triangle.
     //In case of arriving at triangle which contains the end point, use pointer to previous triangles to create the path.
@@ -120,11 +105,25 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     first.currFace=f;
 
-    f->info() = "visited";
+   auto incidentFaces = vs->incident_faces();
 
-    first.first=true;
+   auto firstFace = incidentFaces;
 
-    first.t = NULL;
+   do {
+
+	   if (!CT.is_infinite(incidentFaces)) {
+
+		    TriangleStruct first;
+
+		    first.currFace=incidentFaces;
+
+		    first.first = true;
+
+		    incidentFaces->info() = "visited";
+
+	   }
+
+   } while (++incidentFaces!=firstFace);
 
     TriQueue.push(first);
 
@@ -139,10 +138,8 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     	temp.currFace->info() = "visited";
 
-
-
     	//check neighboring triangles: do not cross if: 1. edge is constraint 2. edge leads to infinite face 3. face is marked as "visited"
-    	if (!(temp.currFace->is_constrained(0)) && !(temp.currFace ->neighbor(0)->info()=="visited")) {
+    	if (!(temp.currFace->is_constrained(0)) && !(temp.currFace ->neighbor(0)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(0)))) {
 
             TriangleStruct temp2;
 
@@ -157,7 +154,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
         		break;
         	}
 
-    	if (!(temp.currFace->is_constrained(1)) && !(temp.currFace ->neighbor(1)->info()=="visited")) {
+    	if (!(temp.currFace->is_constrained(1)) && !(temp.currFace ->neighbor(1)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(1)))) {
 
             TriangleStruct temp2;
 
@@ -174,7 +171,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
 
     	}
-    	if (!(temp.currFace->is_constrained(2)) && !(temp.currFace ->neighbor(2)->info()=="visited")) {
+    	if (!(temp.currFace->is_constrained(2)) && !(temp.currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(2)))) {
 
             TriangleStruct temp2;
 

@@ -45,6 +45,7 @@ CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_topology_trait
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_topology_traits/Arr_unb_planar_topology_traits_2_impl.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_topology_traits/Arr_unb_planar_vert_decomp_helper.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_unb_planar_topology_traits_2.h
+CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_vertical_decomposition_2.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arr_walk_along_line_point_location.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arrangement_2.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Arrangement_2/Arr_compute_zone_visitor.h
@@ -389,6 +390,7 @@ CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_2/Polygon_
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_2/polygon_assertions.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_2_algorithms.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_nop_decomposition_2.h
+CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_vertical_decomposition_2.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Polygon_with_holes_2.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Profile_counter.h
 CMakeFiles/PathFinder.dir/Path.cpp.o: /usr/local/include/CGAL/Quotient.h
@@ -1931,6 +1933,7 @@ CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_topology_trait
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_topology_traits/Arr_unb_planar_topology_traits_2_impl.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_topology_traits/Arr_unb_planar_vert_decomp_helper.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_unb_planar_topology_traits_2.h
+CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_vertical_decomposition_2.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arr_walk_along_line_point_location.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arrangement_2.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Arrangement_2/Arr_compute_zone_visitor.h
@@ -2275,6 +2278,7 @@ CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_2/Polygon_
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_2/polygon_assertions.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_2_algorithms.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_nop_decomposition_2.h
+CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_vertical_decomposition_2.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Polygon_with_holes_2.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Profile_counter.h
 CMakeFiles/PathFinder.dir/main.cpp.o: /usr/local/include/CGAL/Quotient.h

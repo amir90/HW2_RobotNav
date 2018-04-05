@@ -19,6 +19,7 @@
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Constrained_triangulation_2.h>
+#include <CGAL/Polygon_vertical_decomposition_2.h>
 #include <list>
 
 typedef typename CGAL::Gmpq Number_type;
@@ -38,6 +39,7 @@ typedef CGAL::Triangulation_face_base_with_info_2<std::string,Kernel>    Fbb;
 typedef CGAL::Constrained_triangulation_face_base_2<Kernel,Fbb>        Fb;
 typedef CGAL::Triangulation_data_structure_2<Vb,Fb>               TDS;
 typedef typename CGAL::Constrained_triangulation_2<Kernel,TDS,Itag> ConstrainedTriangulation;
+typedef typename CGAL::Polygon_vertical_decomposition_2<Kernel>  pvd;
 
 
 #endif //INC_2_3_CGAL_DEFINES_H

@@ -35,6 +35,8 @@ CGAL/Triangulation_vertex_base_with_info_2.h
 -
 CGAL/Constrained_triangulation_2.h
 -
+CGAL/Polygon_vertical_decomposition_2.h
+-
 list
 -
 
@@ -492,6 +494,20 @@ CGAL/Arr_topology_traits/Arr_inc_insertion_zone_visitor.h
 CGAL/assertions.h
 -
 CGAL/Arr_topology_traits/Arr_unb_planar_topology_traits_2_impl.h
+-
+
+/usr/local/include/CGAL/Arr_vertical_decomposition_2.h
+CGAL/license/Arrangement_on_surface_2.h
+-
+CGAL/Arrangement_on_surface_2.h
+-
+CGAL/Basic_sweep_line_2.h
+-
+vector
+-
+boost/mpl/if.hpp
+-
+boost/type_traits.hpp
 -
 
 /usr/local/include/CGAL/Arr_walk_along_line_point_location.h
@@ -4374,6 +4390,26 @@ CGAL/Polygon_2/Polygon_2_algorithms_impl.h
 CGAL/license/Minkowski_sum_2.h
 -
 CGAL/Polygon_2.h
+-
+
+/usr/local/include/CGAL/Polygon_vertical_decomposition_2.h
+CGAL/license/Minkowski_sum_2.h
+-
+CGAL/Polygon_2.h
+-
+CGAL/Polygon_with_holes_2.h
+-
+CGAL/General_polygon_set_2.h
+-
+CGAL/Arr_vertical_decomposition_2.h
+-
+CGAL/Arr_segment_traits_2.h
+-
+CGAL/Gps_segment_traits_2.h
+-
+vector
+-
+list
 -
 
 /usr/local/include/CGAL/Polygon_with_holes_2.h
