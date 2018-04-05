@@ -19,6 +19,7 @@
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Constrained_triangulation_2.h>
+#include <list>
 
 typedef typename CGAL::Gmpq Number_type;
 typedef typename CGAL::Cartesian<Number_type> Kernel;

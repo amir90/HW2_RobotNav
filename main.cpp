@@ -14,7 +14,7 @@ struct TriangleStruct {
 
 	ConstrainedTriangulation::Face_handle currFace;
 
-	TriangleStruct t;
+	TriangleStruct* t;
 
 	bool first=true;
 
@@ -64,7 +64,6 @@ vector<Polygon_2> loadPolygons(ifstream &is) {
 }
 
 vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon_2 &robot, vector<Polygon_2> &obstacles) {
-    //todo: implement this function.
 
     // minus robot
     Polygon_2 minus_robot;
@@ -117,29 +116,38 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     std::queue<TriangleStruct> TriQueue;
 
-    TriangleStruct temp;
+    TriangleStruct first;
 
-    temp.currFace=f;
+    first.currFace=f;
 
     f->info() = "visited";
 
-    TriQueue.push(temp);
+    first.first=true;
+
+    first.t = NULL;
+
+    TriQueue.push(first);
 
     bool foundPath = false;
 
     while (!TriQueue.empty()) {
+
+        TriangleStruct temp;
+
     	temp = TriQueue.front();
     	TriQueue.pop();
 
     	temp.currFace->info() = "visited";
 
-        TriangleStruct temp2;
+
 
     	//check neighboring triangles: do not cross if: 1. edge is constraint 2. edge leads to infinite face 3. face is marked as "visited"
     	if (!(temp.currFace->is_constrained(0)) && !(temp.currFace ->neighbor(0)->info()=="visited")) {
 
+            TriangleStruct temp2;
+
     		temp2.currFace = temp.currFace->neighbor(0)->neighbor(0);
-    		temp2.t = temp;
+    		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
 
@@ -151,8 +159,10 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     	if (!(temp.currFace->is_constrained(1)) && !(temp.currFace ->neighbor(1)->info()=="visited")) {
 
+            TriangleStruct temp2;
+
     		temp2.currFace = temp.currFace->neighbor(1)->neighbor(1);
-    		temp2.t = temp;
+    		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
 
@@ -166,8 +176,10 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	}
     	if (!(temp.currFace->is_constrained(2)) && !(temp.currFace ->neighbor(2)->info()=="visited")) {
 
+            TriangleStruct temp2;
+
     		temp2.currFace = temp.currFace->neighbor(2)->neighbor(2);
-    		temp2.t = temp;
+    		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
 
@@ -189,15 +201,47 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     if (foundPath) {
 
+    	std::list<Point_2> path;
+
     	auto temp3 = TriQueue.front();
 
+    	path.push_front(end);
+
+    	while (temp3.first!=true) {
+
+    		auto p1 = temp3.currFace->vertex(0)->point();
+    		auto p2 = temp3.currFace->vertex(1)->point();
+    		auto p3 = temp3.currFace->vertex(2)->point();
+    		Point_2 p4 = CGAL::centroid(p1,p2,p3);
+    		path.push_front(p4);
+
+    		temp3 = *(temp3.t);
+    	}
+
+		auto p1 = temp3.currFace->vertex(0)->point();
+		auto p2 = temp3.currFace->vertex(1)->point();
+		auto p3 = temp3.currFace->vertex(2)->point();
+		Point_2 p4 = CGAL::centroid(p1,p2,p3);
+		path.push_front(p4);
+
+		path.push_front(start);
+
+		return vector<Point_2>{ std::make_move_iterator(std::begin(path)),
+		                  std::make_move_iterator(std::end(path)) };
+
+
+
+    } else {
+
+    	std::cout<<"no path found\n";
+    	exit (0);
 
     }
 
 
    //Djikstra?
 
-    return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
+//    return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
 }
 
 int main(int argc, char *argv[]) {
