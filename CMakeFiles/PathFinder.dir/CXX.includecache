@@ -39,6 +39,8 @@ CGAL/Polygon_vertical_decomposition_2.h
 -
 list
 -
+CGAL/aff_transformation_tags.h
+-
 
 /home/amir/Documents/CS Masters/Robotics/HW2/HW2_RobotNav/Path.cpp
 Path.h
@@ -84,6 +86,10 @@ Path.h
 CGAL/Arr_segment_traits_2.h
 -
 CGAL/Arrangement_2.h
+-
+iostream
+-
+fstream
 -
 
 /usr/local/include/CGAL/Aff_transformation_2.h

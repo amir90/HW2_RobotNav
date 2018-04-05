@@ -21,6 +21,7 @@
 #include <CGAL/Constrained_triangulation_2.h>
 #include <CGAL/Polygon_vertical_decomposition_2.h>
 #include <list>
+#include <CGAL/aff_transformation_tags.h>
 
 typedef typename CGAL::Gmpq Number_type;
 typedef typename CGAL::Cartesian<Number_type> Kernel;
@@ -33,7 +34,8 @@ typedef typename CGAL::Polygon_2<Kernel> Polygon_2;
 typedef typename CGAL::Polygon_with_holes_2<Kernel> Polygon_with_holes_2;
 typedef CGAL::Arr_segment_traits_2<Kernel> Traits_2;
 typedef typename CGAL::Arrangement_2<Traits_2> Arrangement_2;
-typedef CGAL::Exact_predicates_tag Itag;
+typedef CGAL::Aff_transformation_2<Kernel>  Transformation;
+typedef CGAL::Exact_intersections_tag Itag;
 typedef CGAL::Triangulation_vertex_base_2<Kernel>                      Vb;
 typedef CGAL::Triangulation_face_base_with_info_2<std::string,Kernel>    Fbb;
 typedef CGAL::Constrained_triangulation_face_base_2<Kernel,Fbb>        Fb;

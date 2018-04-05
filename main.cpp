@@ -7,14 +7,15 @@
 #include "Path.h"
 #include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/Arrangement_2.h>
-
+#include <iostream>
+#include <fstream>
 
 
 struct TriangleStruct {
 
 	ConstrainedTriangulation::Face_handle currFace;
 
-	TriangleStruct* t;
+	TriangleStruct* t = NULL;
 
 	bool first=true;
 
@@ -50,9 +51,36 @@ vector<Polygon_2> loadPolygons(ifstream &is) {
 
 vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon_2 &robot, vector<Polygon_2> &obstacles) {
 
+
+
+	ConstrainedTriangulation cdt;
+	  std::cout << "Inserting a grid of 5x5 constraints " << std::endl;
+	  for (int i = 1; i < 6; ++i)
+	    cdt.insert_constraint( Point_2(0,i*100), Point_2(6*100,i*100));
+	  for (int j = 1; j < 6; ++j)
+	    cdt.insert_constraint( Point_2(j*100,0), Point_2(j*100,6*100));
+	  assert(cdt.is_valid());
+	  int count1 = 0;
+	  for (ConstrainedTriangulation::Finite_edges_iterator eit = cdt.finite_edges_begin();
+	       eit != cdt.finite_edges_end();
+	       ++eit)
+	    if (cdt.is_constrained(*eit)) ++count1;
+	  std::cout << "The number of resulting constrained edges is  ";
+	  std::cout <<  count1 << std::endl;
+
+
     // minus robot
+	//need to bring first point of robot to start point?
     Polygon_2 minus_robot;
-    for (Polygon_2::Vertex_iterator vi = robot.vertices_begin(); vi != robot.vertices_end(); ++vi) {
+    Polygon_2 tempRobot;
+    minus_robot = robot;
+    auto delta = start - Point_2(minus_robot.vertices_begin()->x(), minus_robot.vertices_begin()->y());
+    Transformation translate(CGAL::TRANSLATION,delta);
+    tempRobot = transform(translate, robot);
+
+    cout<<"done translation";
+
+    for (Polygon_2::Vertex_iterator vi = tempRobot.vertices_begin(); vi != tempRobot.vertices_end(); ++vi) {
         Kernel::FT x = vi->x(), y = vi->y();
         Point_2 minus_vertex(-x, -y);
         minus_robot.push_back(minus_vertex);
@@ -63,23 +91,76 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     // minkowsky sum = calc c-obstacles arrangement
     //Meanwhile , build a constrained triangulation - c-obstacles are the constraints
     ConstrainedTriangulation CT;
- //   Arrangement_2 arr;
     for(int i = 0; i < obstacles_size; i++) {
         Polygon_with_holes_2  c_obstacle_with_hole  = minkowski_sum_2(obstacles[i], minus_robot);
         CGAL_assertion (c_obstacle_with_hole.number_of_holes() == 0);
         Polygon_2 c_obstacle = c_obstacle_with_hole.outer_boundary();
-
-  //      int obs_size = c_obstacle.size();
- //       Segment_2 edges[obs_size];
-        int index = 0;
-        for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
-
-            CT.insert_constraint(ei->source(),ei->target());
-        }
+        std::cout<<"Calculated Minkowski sum of "<<i<<" obstacle" <<endl;
+   //     for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
+        	for (Polygon_2::Edge_const_iterator ei = obstacles[i].edges_begin(); ei != obstacles[i].edges_end(); ++ei) {
+        	if (i==1) {
+        	std::cout<<ei->source()<<" ; "<<ei->target()<<endl;
+        	CT.insert_constraint(ei->source(),ei->target());
+        	}
+        	}
+        std::cout<<"Added constrains of "<<i<<" obstacle" <<endl;
     }
+
+
+
+    //output mesh structure using ipe
+    std::ofstream myFile;
+    std::ifstream Template;
+	 std::string line;
+
+    Template.open("ipe2.xml");
+    myFile.open("Ipe.xml");
+
+
+    while (std::getline(Template,line)) {
+    	myFile <<line<<"\n";
+    }
+
+    myFile << "<page>\n";
+
+    for (auto i=CT.finite_vertices_begin(); i!=CT.finite_vertices_end(); i++) {
+    myFile << "<use name=\"mark/disk(sx)\" " << "pos= \"" << i->point().x() << " " << i->point().y() << "\" size=\"normal\" stroke=\"black\"/>\n";
+    }
+
+    for (auto i = CT.finite_faces_begin(); i!=CT.finite_faces_end(); i++) {
+
+    Point_2 p1 = i->vertex(0)->point();
+
+    Point_2 p2 = i->vertex(1)->point();
+
+    myFile << "<path stroke = \"black\"> \n"  << p1 <<" m \n" << p2 << " l \n" << "</path> \n";
+
+     p1 = i->vertex(1)->point();
+
+     p2 = i->vertex(2)->point();
+
+    myFile << "<path stroke = \"black\"> \n"  << p1 <<" m \n" << p2 << " l \n" << "</path> \n";
+
+     p1 = i->vertex(2)->point();
+
+     p2 = i->vertex(0)->point();
+
+    myFile << "<path stroke = \"black\"> \n"  << p1 <<" m \n" << p2 << " l \n" << "</path> \n";
+
+
+    }
+    myFile << "</page>\n";
+    myFile << "</ipe>\n";
+    myFile.close();
+
+
+    CGAL_assertion (CT.is_valid());
+
 
     auto vs = CT.insert(start);
     CT.insert(end);
+
+    std::cout<<"created triangulation\n";
 
     ConstrainedTriangulation::Face_handle f;
 
@@ -109,6 +190,8 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
    auto firstFace = incidentFaces;
 
+   int count=0;
+
    do {
 
 	   if (!CT.is_infinite(incidentFaces)) {
@@ -121,11 +204,15 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
 		    incidentFaces->info() = "visited";
 
+		    TriQueue.push(first);
+
+		    count++;
+
 	   }
 
    } while (++incidentFaces!=firstFace);
 
-    TriQueue.push(first);
+   std::cout<<"added first faces!"<<endl;
 
     bool foundPath = false;
 
@@ -139,49 +226,58 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	temp.currFace->info() = "visited";
 
     	//check neighboring triangles: do not cross if: 1. edge is constraint 2. edge leads to infinite face 3. face is marked as "visited"
-    	if (!(temp.currFace->is_constrained(0)) && !(temp.currFace ->neighbor(0)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(0)))) {
+    	if ( !(CT.is_infinite(temp.currFace->neighbor(0)))/* && !(temp.currFace->is_constrained(0)) */ && !(temp.currFace ->neighbor(0)->info()=="visited")) {
+
+    	cout<<"checking face 1"<<endl;
 
             TriangleStruct temp2;
 
-    		temp2.currFace = temp.currFace->neighbor(0)->neighbor(0);
+    		temp2.currFace = temp.currFace->neighbor(0);
     		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
+    		count++;
 
-        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
-        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(2)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(0)->point());
+        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
         		foundPath=true;
         		break;
         	}
 
-    	if (!(temp.currFace->is_constrained(1)) && !(temp.currFace ->neighbor(1)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(1)))) {
+    	if (!(CT.is_infinite(temp.currFace->neighbor(1)))/* && !(temp.currFace->is_constrained(1))*/ && !(temp.currFace ->neighbor(1)->info()=="visited")) {
+
+    		cout<<"checking face 2"<<endl;
 
             TriangleStruct temp2;
 
-    		temp2.currFace = temp.currFace->neighbor(1)->neighbor(1);
+    		temp2.currFace = temp.currFace->neighbor(1);
     		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
+    		count++;
 
-        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
-        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(2)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(0)->point());
+        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
         		foundPath=true;
         		break;
         	}
 
 
     	}
-    	if (!(temp.currFace->is_constrained(2)) && !(temp.currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(2)))) {
+    	if (/*!(temp.currFace->is_constrained(2)) && */!(temp.currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp.currFace->neighbor(2)))) {
+
+    		cout<<"checking face 3"<<endl;
 
             TriangleStruct temp2;
 
-    		temp2.currFace = temp.currFace->neighbor(2)->neighbor(2);
+    		temp2.currFace = temp.currFace->neighbor(2);
     		temp2.t = &temp;
     		temp2.first = false;
     		TriQueue.push(temp2);
+    		count++;
 
         	Triangle_2 tri = Triangle_2(temp2.currFace->vertex(0)->point(),temp2.currFace->vertex(1)->point(),temp2.currFace->vertex(2)->point());
-        	if (!tri.oriented_side(start)==CGAL::ON_NEGATIVE_SIDE) {
+        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
         		foundPath=true;
         		break;
         	}
@@ -190,9 +286,16 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     }
 
-
-
     }
+
+    std::cout<<"Done building face graph"<<endl;
+    std::cout<<"Added: "<<count<<" Triangles\n";
+
+    for (auto i=CT.finite_vertices_begin(); i!=CT.finite_vertices_end(); i++) {
+    	std::cout<<i->point()<<endl;
+    }
+
+
 
     //make path
 
@@ -231,9 +334,11 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     } else {
 
     	std::cout<<"no path found\n";
-    	exit (0);
+  //  	exit (0);
 
     }
+
+
 
 
    //Djikstra?
