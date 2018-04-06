@@ -17,6 +17,8 @@ struct TriangleStruct {
 
 	TriangleStruct* t = nullptr;
 
+	Point_2 midPoint;
+
 	bool first=true;
 
 };
@@ -52,25 +54,6 @@ vector<Polygon_2> loadPolygons(ifstream &is) {
 vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon_2 &robot, vector<Polygon_2> &obstacles) {
 
 
-/*
-	ConstrainedTriangulation cdt;
-	  std::cout << "Inserting a grid of 5x5 constraints " << std::endl;
-	  for (int i = 1; i < 6; ++i)
-	    cdt.insert_constraint( Point_2(0,i*100), Point_2(6*100,i*100));
-	  for (int j = 1; j < 6; ++j)
-	    cdt.insert_constraint( Point_2(j*100,0), Point_2(j*100,6*100));
-	  assert(cdt.is_valid());
-	  int count1 = 0;
-	  for (ConstrainedTriangulation::Finite_edges_iterator eit = cdt.finite_edges_begin();
-	       eit != cdt.finite_edges_end();
-	       ++eit)
-	    if (cdt.is_constrained(*eit)) ++count1;
-	  std::cout << "The number of resulting constrained edges is  ";
-	  std::cout <<  count1 << std::endl;
-*/
-
-    // minus robot
-	//need to bring first point of robot to start point?
     Polygon_2 minus_robot;
     Polygon_2 tempRobot;
     auto delta = CGAL::ORIGIN - Point_2(robot.vertices_begin()->x(), robot.vertices_begin()->y());
@@ -132,9 +115,41 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
 
     auto vs = CT.insert(start);
-    CT.insert(end);
+    auto ve = CT.insert(end);
 
 
+    //add bounding box as constraint
+    auto Xmax = CT.finite_vertices_begin()->point().x(); auto Xmin = CT.finite_vertices_begin()->point().x();
+    auto Ymax = CT.finite_vertices_begin()->point().y(); auto Ymin = CT.finite_vertices_begin()->point().y();
+    for (auto i = CT.finite_vertices_begin(); i!=CT.finite_vertices_end(); i++) {
+
+    	if (Xmax<i->point().x()) {
+
+    		Xmax = i->point().x();
+
+    	}
+    	if (Xmin>i->point().x()) {
+
+    		Xmin = i->point().x();
+
+    	}
+    	if (Ymax<i->point().y()) {
+
+    		Ymax = i->point().y();
+
+    	}
+    	if (Ymin>i->point().y()) {
+
+    		Ymin = i->point().y();
+
+    	}
+
+    }
+
+    CT.insert_constraint(Point_2(Xmax*1.2,Ymax*1.2),Point_2(Xmin*1.2,Ymax*1.2));
+    CT.insert_constraint(Point_2(Xmax*1.2,Ymin*1.2),Point_2(Xmin*1.2,Ymin*1.2));
+    CT.insert_constraint(Point_2(Xmax*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymax*1.2));
+    CT.insert_constraint(Point_2(Xmin*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymin*1.2));
 
 
     //wrap
@@ -281,18 +296,19 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	cout<<"checking face 1"<<endl;
 
     		TriangleStruct* temp2 = new TriangleStruct;
-
     		temp2->currFace = temp->currFace->neighbor(0);
     		temp2->t = temp;
     		temp2->first = false;
     	/*	temp2.t->first = false;
     		temp2.t->currFace = temp2.currFace;
     		temp2.t->t = temp.t;*/
+    		temp2->midPoint = CGAL::midpoint(temp->currFace->vertex(1)->point(),temp->currFace->vertex(2)->point());
     		TriQueue.push(temp2);
-    		count++;
+    	    count++;
 
         	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(2)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(0)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	//if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	if (temp2->currFace->has_vertex(ve)) {
         		foundPath=true;
         		break;
         	}
@@ -311,11 +327,13 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	/*	temp2.t->first = false;
     		temp2.t->currFace = temp.currFace;
     		temp2.t->t = temp.t;*/
+    		temp2->midPoint = CGAL::midpoint(temp->currFace->vertex(0)->point(),temp->currFace->vertex(2)->point());
     		TriQueue.push(temp2);
     		count++;
 
         	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(2)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(0)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	//if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	if (temp2->currFace->has_vertex(ve)) {
         		foundPath=true;
         		break;
         	}
@@ -334,11 +352,13 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	/*	temp2.t->first = false;
     		temp2.t->currFace = temp2.currFace;
     		temp2.t->t = temp.t;*/
+    		temp2->midPoint = CGAL::midpoint(temp->currFace->vertex(0)->point(),temp->currFace->vertex(1)->point());
     		TriQueue.push(temp2);
     		count++;
 
         	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(0)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(2)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	//if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
+        	if (temp2->currFace->has_vertex(ve)) {
         		foundPath=true;
         		break;
         	}
@@ -365,7 +385,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	cout<<"path found!"<<endl;
     	std::list<Point_2> path;
 
-    	auto temp3 = TriQueue.front();
+    	auto temp3 = TriQueue.back();
 
     	path.push_front(end);
 
@@ -376,17 +396,16 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     		auto p1 = temp3->currFace->vertex(0)->point();
     		auto p2 = temp3->currFace->vertex(1)->point();
     		auto p3 = temp3->currFace->vertex(2)->point();
-    		Point_2 p4 = CGAL::centroid(p1,p2,p3);
+    		Point_2 p4 = CGAL::midpoint(p1,CGAL::midpoint(p2,p3));//CGAL::centroid(p1,p2,p3);
     		path.push_front(p4);
-
-    		cout<<temp3->first<<endl;
+    		path.push_front(temp3->midPoint);
     		temp3 = temp3->t;
     	}
 
 		auto p1 = temp3->currFace->vertex(0)->point();
 		auto p2 = temp3->currFace->vertex(1)->point();
 		auto p3 = temp3->currFace->vertex(2)->point();
-		Point_2 p4 = CGAL::centroid(p1,p2,p3);
+		Point_2 p4 = CGAL::midpoint(p1,CGAL::midpoint(p2,p3));//CGAL::centroid(p1,p2,p3);
 		path.push_front(p4);
 
 		path.push_front(start);
