@@ -252,108 +252,248 @@ h
 <tiling name="rising" angle="30" step="4" width="1"/>
 </ipestyle>
 <page>
-<use name="mark/disk(sx)" pos= "167/10 51/10" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "197/10 -59/10" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "-30/1 -30/1" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "-15/1 7/1" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "-12/1 0/1" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "0/1 -3/1" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "9/5 51/10" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "175 48" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "167 51" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "18 51" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "0 -30" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-112.48 -1.88" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-142 67" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-150 70" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-300 -300" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-296 -304" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-295.327 -303.673" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-295 -304" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-292 -303" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "205 -62" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "0 0" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "60 60" size="normal" stroke="black"/>
 <path stroke = "black"> 
-197/10 -59/10 m 
-167/10 51/10 l 
+-295.327 -303.673 m 
+-295 -304 l 
 </path> 
 <path stroke = "black"> 
-167/10 51/10 m 
--30/1 -30/1 l 
+-295 -304 m 
+175 48 l 
 </path> 
 <path stroke = "black"> 
--30/1 -30/1 m 
-197/10 -59/10 l 
+175 48 m 
+-295.327 -303.673 l 
 </path> 
 <path stroke = "black"> 
--12/1 0/1 m 
--15/1 7/1 l 
+175 48 m 
+167 51 l 
 </path> 
 <path stroke = "black"> 
--15/1 7/1 m 
--30/1 -30/1 l 
+167 51 m 
+18 51 l 
 </path> 
 <path stroke = "black"> 
--30/1 -30/1 m 
--12/1 0/1 l 
+18 51 m 
+175 48 l 
 </path> 
 <path stroke = "black"> 
-0/1 -3/1 m 
--12/1 0/1 l 
+-300 -300 m 
+175 48 l 
 </path> 
 <path stroke = "black"> 
--12/1 0/1 m 
--30/1 -30/1 l 
+175 48 m 
+0 -30 l 
 </path> 
 <path stroke = "black"> 
--30/1 -30/1 m 
-0/1 -3/1 l 
+0 -30 m 
+-300 -300 l 
 </path> 
 <path stroke = "black"> 
-9/5 51/10 m 
--15/1 7/1 l 
+0 -30 m 
+175 48 l 
 </path> 
 <path stroke = "black"> 
--15/1 7/1 m 
--12/1 0/1 l 
+175 48 m 
+18 51 l 
 </path> 
 <path stroke = "black"> 
--12/1 0/1 m 
-9/5 51/10 l 
+18 51 m 
+0 -30 l 
 </path> 
 <path stroke = "black"> 
-167/10 51/10 m 
-0/1 -3/1 l 
+0 0 m 
+0 -30 l 
 </path> 
 <path stroke = "black"> 
-0/1 -3/1 m 
--30/1 -30/1 l 
+0 -30 m 
+18 51 l 
 </path> 
 <path stroke = "black"> 
--30/1 -30/1 m 
-167/10 51/10 l 
+18 51 m 
+0 0 l 
 </path> 
 <path stroke = "black"> 
-167/10 51/10 m 
--15/1 7/1 l 
+-142 67 m 
+-112.48 -1.88 l 
 </path> 
 <path stroke = "black"> 
--15/1 7/1 m 
-9/5 51/10 l 
+-112.48 -1.88 m 
+18 51 l 
 </path> 
 <path stroke = "black"> 
-9/5 51/10 m 
-167/10 51/10 l 
+18 51 m 
+-142 67 l 
 </path> 
 <path stroke = "black"> 
-0/1 -3/1 m 
-9/5 51/10 l 
+-300 -300 m 
+0 -30 l 
 </path> 
 <path stroke = "black"> 
-9/5 51/10 m 
--12/1 0/1 l 
+0 -30 m 
+-112.48 -1.88 l 
 </path> 
 <path stroke = "black"> 
--12/1 0/1 m 
-0/1 -3/1 l 
+-112.48 -1.88 m 
+-300 -300 l 
 </path> 
 <path stroke = "black"> 
-9/5 51/10 m 
-0/1 -3/1 l 
+167 51 m 
+-142 67 l 
 </path> 
 <path stroke = "black"> 
-0/1 -3/1 m 
-167/10 51/10 l 
+-142 67 m 
+18 51 l 
 </path> 
 <path stroke = "black"> 
-167/10 51/10 m 
-9/5 51/10 l 
+18 51 m 
+167 51 l 
+</path> 
+<path stroke = "black"> 
+-150 70 m 
+-112.48 -1.88 l 
+</path> 
+<path stroke = "black"> 
+-112.48 -1.88 m 
+-142 67 l 
+</path> 
+<path stroke = "black"> 
+-142 67 m 
+-150 70 l 
+</path> 
+<path stroke = "black"> 
+167 51 m 
+-150 70 l 
+</path> 
+<path stroke = "black"> 
+-150 70 m 
+-142 67 l 
+</path> 
+<path stroke = "black"> 
+-142 67 m 
+167 51 l 
+</path> 
+<path stroke = "black"> 
+-150 70 m 
+-300 -300 l 
+</path> 
+<path stroke = "black"> 
+-300 -300 m 
+-112.48 -1.88 l 
+</path> 
+<path stroke = "black"> 
+-112.48 -1.88 m 
+-150 70 l 
+</path> 
+<path stroke = "black"> 
+-300 -300 m 
+-296 -304 l 
+</path> 
+<path stroke = "black"> 
+-296 -304 m 
+175 48 l 
+</path> 
+<path stroke = "black"> 
+175 48 m 
+-300 -300 l 
+</path> 
+<path stroke = "black"> 
+-296 -304 m 
+-295.327 -303.673 l 
+</path> 
+<path stroke = "black"> 
+-295.327 -303.673 m 
+175 48 l 
+</path> 
+<path stroke = "black"> 
+175 48 m 
+-296 -304 l 
+</path> 
+<path stroke = "black"> 
+-296 -304 m 
+-295 -304 l 
+</path> 
+<path stroke = "black"> 
+-295 -304 m 
+-295.327 -303.673 l 
+</path> 
+<path stroke = "black"> 
+-295.327 -303.673 m 
+-296 -304 l 
+</path> 
+<path stroke = "black"> 
+-295 -304 m 
+-292 -303 l 
+</path> 
+<path stroke = "black"> 
+-292 -303 m 
+175 48 l 
+</path> 
+<path stroke = "black"> 
+175 48 m 
+-295 -304 l 
+</path> 
+<path stroke = "black"> 
+-292 -303 m 
+205 -62 l 
+</path> 
+<path stroke = "black"> 
+205 -62 m 
+175 48 l 
+</path> 
+<path stroke = "black"> 
+175 48 m 
+-292 -303 l 
+</path> 
+<path stroke = "black"> 
+-112.48 -1.88 m 
+0 0 l 
+</path> 
+<path stroke = "black"> 
+0 0 m 
+18 51 l 
+</path> 
+<path stroke = "black"> 
+18 51 m 
+-112.48 -1.88 l 
+</path> 
+<path stroke = "black"> 
+-112.48 -1.88 m 
+0 -30 l 
+</path> 
+<path stroke = "black"> 
+0 -30 m 
+0 0 l 
+</path> 
+<path stroke = "black"> 
+0 0 m 
+-112.48 -1.88 l 
+</path> 
+<path stroke = "black"> 
+167 51 m 
+60 60 l 
+</path> 
+<path stroke = "black"> 
+60 60 m 
+-150 70 l 
+</path> 
+<path stroke = "black"> 
+-150 70 m 
+167 51 l 
 </path> 
 </page>
 </ipe>
