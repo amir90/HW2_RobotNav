@@ -10,7 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.5.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.5.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.5.1/CMakeSystem.cmake"
-  "CMakeLists.txt"
+  "/home/nitai/workspaces/robotics/hw2/CMakeLists.txt"
   "/usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALConfig.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALExports-release.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/CGAL/CGALExports.cmake"

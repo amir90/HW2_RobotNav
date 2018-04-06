@@ -48,23 +48,29 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     int obstacles_size = obstacles.size();
 
     // minkowsky sum = calc c-obstacles arrangement
-    Arrangement_2 arr;
+    Polygon_set_2 polygon_set; 
     for(int i = 0; i < obstacles_size; i++) {
         Polygon_with_holes_2  c_obstacle_with_hole  = minkowski_sum_2(obstacles[i], minus_robot);
         CGAL_assertion (c_obstacle_with_hole.number_of_holes() == 0);
         Polygon_2 c_obstacle = c_obstacle_with_hole.outer_boundary();
         
-        int obs_size = c_obstacle.size();
-        Segment_2 edges[obs_size];
-        int index = 0;
-        for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
-            edges[index++] = *ei;
-        }
+        polygon_set.join(c_obstacle);
+        // int obs_size = c_obstacle.size();
+        // Segment_2 edges[obs_size];
+        // int index = 0;
+        // for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
+        //     edges[index++] = *ei;
+        // }
 
-        CGAL::insert(arr, &edges[0], &edges[obs_size]);
+        // CGAL::insert(arr, &edges[0], &edges[obs_size]);
     }
 
+    polygon_set.complement();
+    Arrangement_2 free_space_arrangement = polygon_set.arrangement();
+
     //trapezodial decomposition
+    pair<Arrangement_2::Vertex_const_handle, pair<CGAL::Object, CGAL::Object> > io;
+    CGAL::decompose(free_space_arrangement, io);
     
     //create graph from decomposition
     

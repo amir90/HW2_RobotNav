@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/nitai/workspaces/robotics/hw2/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/nitai/documents/courses/robotics/workspace/hw2/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

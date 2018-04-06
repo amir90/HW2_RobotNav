@@ -1,3 +1,3 @@
-/home/nitai/workspaces/robotics/hw2/CMakeFiles/edit_cache.dir
-/home/nitai/workspaces/robotics/hw2/CMakeFiles/rebuild_cache.dir
-/home/nitai/workspaces/robotics/hw2/CMakeFiles/PathFinder.dir
+/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles/edit_cache.dir
+/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles/rebuild_cache.dir
+/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles/PathFinder.dir

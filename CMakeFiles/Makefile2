@@ -57,7 +57,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/nitai/workspaces/robotics/hw2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nitai/workspaces/robotics/hw2
+CMAKE_BINARY_DIR = /home/nitai/documents/courses/robotics/workspace/hw2
 
 #=============================================================================
 # Target rules for target CMakeFiles/PathFinder.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/nitai/workspaces/robotics/hw2
 CMakeFiles/PathFinder.dir/all:
 	$(MAKE) -f CMakeFiles/PathFinder.dir/build.make CMakeFiles/PathFinder.dir/depend
 	$(MAKE) -f CMakeFiles/PathFinder.dir/build.make CMakeFiles/PathFinder.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nitai/workspaces/robotics/hw2/CMakeFiles --progress-num=1,2,3 "Built target PathFinder"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles --progress-num=1,2,3 "Built target PathFinder"
 .PHONY : CMakeFiles/PathFinder.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/PathFinder.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/PathFinder.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/workspaces/robotics/hw2/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/PathFinder.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/workspaces/robotics/hw2/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles 0
 .PHONY : CMakeFiles/PathFinder.dir/rule
 
 # Convenience name for target.

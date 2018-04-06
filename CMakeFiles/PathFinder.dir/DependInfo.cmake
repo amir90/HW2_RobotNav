@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/nitai/workspaces/robotics/hw2/Path.cpp" "/home/nitai/workspaces/robotics/hw2/CMakeFiles/PathFinder.dir/Path.cpp.o"
-  "/home/nitai/workspaces/robotics/hw2/main.cpp" "/home/nitai/workspaces/robotics/hw2/CMakeFiles/PathFinder.dir/main.cpp.o"
+  "/home/nitai/workspaces/robotics/hw2/Path.cpp" "/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles/PathFinder.dir/Path.cpp.o"
+  "/home/nitai/workspaces/robotics/hw2/main.cpp" "/home/nitai/documents/courses/robotics/workspace/hw2/CMakeFiles/PathFinder.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
