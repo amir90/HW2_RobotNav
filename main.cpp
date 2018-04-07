@@ -9,7 +9,7 @@
 #include <CGAL/Arrangement_2.h>
 #include <iostream>
 #include <fstream>
-
+#include <unordered_map>
 
 struct TriangleStruct {
 
@@ -21,8 +21,136 @@ struct TriangleStruct {
 
 };
 
+struct Edge {
+	int v1, v2;
+	double dist;
+};
 
 using namespace std;
+
+// methods for Dijstra
+string getKey(Point_2 * p) {
+	ostringstream stream;
+	stream << p->x().to_double() << "/" << p->y().to_double();
+	return stream.str();
+}
+
+int pushVertex(vector<Point_2> vertices, unordered_map<string, int> vertices_to_index, Point_2 * p) {
+	vertices.push_back(*p);
+	int size = vertices.size();
+	vertices_to_index.insert(make_pair(getKey(p), size-1));
+}
+
+void pushEdge(vector<Edge> edges, int i1, int i2, Point_2 * p1, Point_2 * p2) {
+	Edge e;
+	e.v1=i1;
+	e.v2=i2;
+
+	double x1 = p1->x().to_double();
+	double y1 = p1->y().to_double();
+	double x2 = p2->x().to_double();
+	double y2 = p2->y().to_double();
+
+	e.dist=sqrt( pow(x1-x2,2) + pow(y1-y2,2));
+
+	edges.push_back(e);   
+}
+
+void pushNeighbors(std::queue<TriangleStruct *> q, TriangleStruct * triangle, ConstrainedTriangulation CT) {
+	ConstrainedTriangulation::Face_handle face = triangle->currFace;
+	for(int i = 0; i<3; i++) {
+		if (!(face->is_constrained(i)) && !(face->neighbor(i)->info()=="visited") && !(CT.is_infinite(face->neighbor(i)))) {
+			TriangleStruct* temp2 = new TriangleStruct;
+
+    		temp2->currFace = face->neighbor(i);
+    		temp2->t = triangle;
+    		temp2->first = false;
+    		q.push(temp2);
+		}
+	}
+}
+
+void pushUnhandeledVerticesAndEdges(TriangleStruct * triangle, vector<Point_2> vertices, unordered_map<string, int> vertices_to_index, vector<Edge> edges) {
+	int vertices_index[3];
+	Point_2 vertices_points[3];
+
+	for(int i=0; i<3; i++) {
+		Point_2 p = triangle->currFace->vertex(i)->point();
+		vertices_points[i] = p;
+		unordered_map<string,int>::const_iterator indexIter = vertices_to_index.find(getKey(&p));
+		int index;
+		if(indexIter == vertices_to_index.end()) {
+			pushVertex(vertices, vertices_to_index, &p);
+			index = vertices.size() - 1;
+		}
+		else {
+			index = indexIter->second;
+		}
+
+		vertices_index[i] = index;
+	}
+
+	pushEdge(edges, vertices_index[0], vertices_index[1], &vertices_points[0], &vertices_points[1]);
+	pushEdge(edges, vertices_index[0], vertices_index[2], &vertices_points[0], &vertices_points[2]);
+	pushEdge(edges, vertices_index[2], vertices_index[1], &vertices_points[2], &vertices_points[1]);
+}
+
+char* dijsktra(double** cost, int size, int source,int target)
+{
+    int i,m,min,start,d,j;
+	double* dist = (double*)calloc(size, sizeof(double));
+	int* prev = (int*) calloc(size, sizeof(int));
+    int* selected = (int*) calloc(size, sizeof(int));
+	char* path = (char*) calloc(size, sizeof(char));
+	int N = size;
+	double IN = numeric_limits<double>::max();
+
+    for(i=1;i< N;i++)
+    {
+        dist[i] = IN;
+        prev[i] = -1;
+    }
+    start = source;
+    selected[start]=1;
+    dist[start] = 0;
+    while(selected[target] ==0)
+    {
+        min = IN;
+        m = 0;
+        for(i=1;i< N;i++)
+        {
+            d = dist[start] +cost[start][i];
+            if(d< dist[i]&&selected[i]==0)
+            {
+                dist[i] = d;
+                prev[i] = start;
+            }
+            if(min>dist[i] && selected[i]==0)
+            {
+                min = dist[i];
+                m = i;
+            }
+        }
+        start = m;
+        selected[start] = 1;
+    }
+    start = target;
+    j = 0;
+    while(start != -1)
+    {
+        path[j++] = start+65;
+        start = prev[start];
+    }
+    path[j]='\0';
+    printf("%s", path);
+
+	free(dist);
+	free(prev);
+	free(selected);
+
+    return path;
+}
+
 
 Point_2 loadPoint_2(std::ifstream &is) {
     Kernel::FT x, y;
@@ -201,9 +329,12 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     }
    */
-    //use BFS to get all connected triangles (do not cross triangles through constraint edge).
-    //use a struct which holds the triangle and a pointer to previous triangle.
-    //In case of arriving at triangle which contains the end point, use pointer to previous triangles to create the path.
+
+	// Dijkstra : build graph
+   vector<Point_2> vertices;
+   unordered_map<string, int> vertices_to_index;
+   vector<Edge> edges;
+   
 
     std::queue<TriangleStruct *> TriQueue;
 
@@ -211,29 +342,22 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
    auto firstFace = incidentFaces;
 
-   int count=0;
 
-   do {
+	// add vertices and edges to dijkstra graph
 
-	   if (!CT.is_infinite(incidentFaces)) {
+	pushVertex(vertices, vertices_to_index, &firstFace->vertex(0)->point());
+	pushVertex(vertices, vertices_to_index, &firstFace->vertex(1)->point());
+	pushVertex(vertices, vertices_to_index, &firstFace->vertex(2)->point());
+	
 
-		    TriangleStruct * first = new TriangleStruct;
+	pushEdge(edges, 0,1,&firstFace->vertex(0)->point(), &firstFace->vertex(1)->point());
+	pushEdge(edges, 0,2,&firstFace->vertex(0)->point(), &firstFace->vertex(2)->point());
+	pushEdge(edges, 1,2,&firstFace->vertex(1)->point(), &firstFace->vertex(2)->point());
 
-		    first->currFace=incidentFaces;
+	// push neighbors that were not visited and are not constrained
+	pushNeighbors(TriQueue, firstFace, CT);
 
-		    first->first = true;
-
-		    TriQueue.push(first);
-
-		    count++;
-
-	   }
-
-   } while (++incidentFaces!=firstFace);
-
-   std::cout<<"added first faces!"<<endl;
-
-    bool foundPath = false;
+   std::cout<<"added first face!"<<endl;
 
     while (!TriQueue.empty()) {
 
@@ -244,177 +368,27 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     	temp->currFace->info() = "visited";
 
-    	//check neighboring triangles: do not cross if: 1. edge is constraint 2. edge leads to infinite face 3. face is marked as "visited"
-/*
-    	cout<<"checking face: "<<temp.currFace->vertex(0)->point()<<" "<<temp.currFace->vertex(1)->point()<<" "<<temp.currFace->vertex(2)->point()<<endl;
+		pushNeighbors(TriQueue, temp, CT);
 
-    	if (temp.currFace->is_constrained(0) || temp.currFace->is_constrained(1) || temp.currFace->is_constrained(2)) {
-
-    		std::cout<<"has constrained edge"<<endl;
-
-    	}
-
-    	if (temp.currFace->neighbor(0)->info()=="visited"|| temp.currFace->neighbor(1)->info()=="visited"||temp.currFace->neighbor(2)->info()=="visited") {
-
-    		std::cout<<"neigbor visited"<<endl;
-
-    	}
-
-    	if ((CT.is_infinite(temp.currFace->neighbor(0)))||(CT.is_infinite(temp.currFace->neighbor(1)))||(CT.is_infinite(temp.currFace->neighbor(2)))) {
-
-    		std::cout<<"neigbor is infintie"<<endl;
-
-    	}
-
-    	//test passed
-    	auto testEdges = vs->incident_edges();
-    	auto firstEdge = testEdges;
-    	do {
-    		cout<<"checked edge"<<endl;
-    		if (CT.is_constrained(*testEdges)) {
-    		std::cout<<"Problem - constrained edge"<<endl;
-    		}
-    	} while (firstEdge!=++testEdges);
-*/
-    	if ( !(CT.is_infinite(temp->currFace->neighbor(0))) && !(temp->currFace->is_constrained(0)) && !(temp->currFace ->neighbor(0)->info()=="visited")) {
-
-    	cout<<"checking face 1"<<endl;
-
-    		TriangleStruct* temp2 = new TriangleStruct;
-
-    		temp2->currFace = temp->currFace->neighbor(0);
-    		temp2->t = temp;
-    		temp2->first = false;
-    	/*	temp2.t->first = false;
-    		temp2.t->currFace = temp2.currFace;
-    		temp2.t->t = temp.t;*/
-    		TriQueue.push(temp2);
-    		count++;
-
-        	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(2)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(0)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
-        		foundPath=true;
-        		break;
-        	}
-
-    	}
-
-    	if (!(CT.is_infinite(temp->currFace->neighbor(1))) && !(temp->currFace->is_constrained(1)) && !(temp->currFace ->neighbor(1)->info()=="visited")) {
-
-    		cout<<"checking face 2"<<endl;
-
-            TriangleStruct* temp2 = new TriangleStruct;
-
-    		temp2->currFace = temp->currFace->neighbor(1);
-    		temp2->t = temp;
-    		temp2->first = false;
-    	/*	temp2.t->first = false;
-    		temp2.t->currFace = temp.currFace;
-    		temp2.t->t = temp.t;*/
-    		TriQueue.push(temp2);
-    		count++;
-
-        	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(2)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(0)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
-        		foundPath=true;
-        		break;
-        	}
-
-
-    	}
-    	if (!(temp->currFace->is_constrained(2)) && !(temp->currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp->currFace->neighbor(2)))) {
-
-    		cout<<"checking face 3"<<endl;
-
-            TriangleStruct* temp2 = new TriangleStruct;
-
-    		temp2->currFace = temp->currFace->neighbor(2);
-    		temp2->t = temp;
-    		temp2->first = false;
-    	/*	temp2.t->first = false;
-    		temp2.t->currFace = temp2.currFace;
-    		temp2.t->t = temp.t;*/
-    		TriQueue.push(temp2);
-    		count++;
-
-        	Triangle_2 tri = Triangle_2(temp2->currFace->vertex(0)->point(),temp2->currFace->vertex(1)->point(),temp2->currFace->vertex(2)->point());
-        	if (tri.oriented_side(end)==CGAL::ON_ORIENTED_BOUNDARY) {
-        		foundPath=true;
-        		break;
-        	}
-
-    	}
-
+		// according to the virtices in the previous face
+		pushUnhandeledVerticesAndEdges(temp, vertices, vertices_to_index, edges);
     }
 
 
+	// construct graph array repressentation
+	int vertices_count = vertices.size();
+	double** graph = (double **) calloc(vertices_count, sizeof(double *));
+	for(int i=0; i<vertices_count;i++) {
+		graph[i] = (double*) calloc(vertices_count, sizeof(double));
+		for(int j = 0; j < vertices_count; j++)
+			graph[i][j] = numeric_limits<double>::max();
+	}
 
-    std::cout<<"Done building face graph"<<endl;
-    std::cout<<"Added: "<<count<<" Triangles\n";
-
-    for (auto i=CT.finite_vertices_begin(); i!=CT.finite_vertices_end(); i++) {
-    	std::cout<<i->point()<<endl;
-    }
-
-
-
-    //make path
-
-    if (foundPath) {
-
-    	cout<<"path found!"<<endl;
-    	std::list<Point_2> path;
-
-    	auto temp3 = TriQueue.front();
-
-    	path.push_front(end);
-
-    	while (temp3->first!=true) {
-
-    		cout<<"in loop"<<endl;
-
-    		auto p1 = temp3->currFace->vertex(0)->point();
-    		auto p2 = temp3->currFace->vertex(1)->point();
-    		auto p3 = temp3->currFace->vertex(2)->point();
-    		Point_2 p4 = CGAL::centroid(p1,p2,p3);
-    		path.push_front(p4);
-
-    		cout<<temp3->first<<endl;
-    		temp3 = temp3->t;
-    	}
-
-		auto p1 = temp3->currFace->vertex(0)->point();
-		auto p2 = temp3->currFace->vertex(1)->point();
-		auto p3 = temp3->currFace->vertex(2)->point();
-		Point_2 p4 = CGAL::centroid(p1,p2,p3);
-		path.push_front(p4);
-
-		path.push_front(start);
-
-		cout<<"built path list";
-
-		for (auto i=path.begin(); i!=path.end(); i++) {
-
-			cout<<*i<<" , "<<endl;
-
-		}
-
-		return vector<Point_2>{ std::make_move_iterator(std::begin(path)),
-		                  std::make_move_iterator(std::end(path)) };
-
-
-
-    } else {
-
-    	std::cout<<"no path found\n";
-  //  	exit (0);
-
-    }
-
-
-
-
-   //Djikstra?
+	for(int i=0; i<edges.size(); i++) {
+		Edge e = edges[i];
+		graph[e.v1][e.v2] = e.dist;
+		graph[e.v2][e.v1] = e.dist;
+	}
 
 //    return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
 }

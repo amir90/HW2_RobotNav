@@ -22,6 +22,7 @@
 #include <CGAL/Polygon_vertical_decomposition_2.h>
 #include <list>
 #include <CGAL/aff_transformation_tags.h>
+#include <math.h>   
 
 typedef typename CGAL::Gmpq Number_type;
 typedef typename CGAL::Cartesian<Number_type> Kernel;
