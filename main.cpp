@@ -35,13 +35,13 @@ string getKey(Point_2 * p) {
 	return stream.str();
 }
 
-int pushVertex(vector<Point_2> vertices, unordered_map<string, int> vertices_to_index, Point_2 * p) {
+int pushVertex(vector<Point_2> &vertices, unordered_map<string, int> &vertices_to_index, Point_2 * p) {
 	vertices.push_back(*p);
 	int size = vertices.size();
 	vertices_to_index.insert(make_pair(getKey(p), size-1));
 }
 
-void pushEdge(vector<Edge> edges, int i1, int i2, Point_2 * p1, Point_2 * p2) {
+void pushEdge(vector<Edge> &edges, int i1, int i2, Point_2 * p1, Point_2 * p2) {
 	Edge e;
 	e.v1=i1;
 	e.v2=i2;
@@ -56,7 +56,7 @@ void pushEdge(vector<Edge> edges, int i1, int i2, Point_2 * p1, Point_2 * p2) {
 	edges.push_back(e);   
 }
 
-void pushNeighbors(std::queue<TriangleStruct *> q, TriangleStruct * triangle, ConstrainedTriangulation CT) {
+void pushNeighbors(std::queue<TriangleStruct *> q, TriangleStruct * triangle, ConstrainedTriangulation &CT) {
 	ConstrainedTriangulation::Face_handle face = triangle->currFace;
 	for(int i = 0; i<3; i++) {
 		if (!(face->is_constrained(i)) && !(face->neighbor(i)->info()=="visited") && !(CT.is_infinite(face->neighbor(i)))) {
@@ -70,7 +70,7 @@ void pushNeighbors(std::queue<TriangleStruct *> q, TriangleStruct * triangle, Co
 	}
 }
 
-void pushUnhandeledVerticesAndEdges(TriangleStruct * triangle, vector<Point_2> vertices, unordered_map<string, int> vertices_to_index, vector<Edge> edges) {
+void pushUnhandeledVerticesAndEdges(TriangleStruct * triangle, vector<Point_2> &vertices, unordered_map<string, int> &vertices_to_index, vector<Edge> &edges) {
 	int vertices_index[3];
 	Point_2 vertices_points[3];
 
@@ -142,7 +142,7 @@ char* dijsktra(double** cost, int size, int source,int target)
         start = prev[start];
     }
     path[j]='\0';
-    printf("%s", path);
+	cout << "PATHHHH " << path << endl;
 
 	free(dist);
 	free(prev);
@@ -332,30 +332,35 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
 	// Dijkstra : build graph
    vector<Point_2> vertices;
-   unordered_map<string, int> vertices_to_index;
+   unordered_map<string, int> vertices_to_index = {};
    vector<Edge> edges;
    
 
-    std::queue<TriangleStruct *> TriQueue;
+std::queue<TriangleStruct *> TriQueue;
 
    auto incidentFaces = vs->incident_faces();
 
    auto firstFace = incidentFaces;
 
+   int count=0;
 
-	// add vertices and edges to dijkstra graph
+   do {
 
-	pushVertex(vertices, vertices_to_index, &firstFace->vertex(0)->point());
-	pushVertex(vertices, vertices_to_index, &firstFace->vertex(1)->point());
-	pushVertex(vertices, vertices_to_index, &firstFace->vertex(2)->point());
-	
+	   if (!CT.is_infinite(incidentFaces)) {
 
-	pushEdge(edges, 0,1,&firstFace->vertex(0)->point(), &firstFace->vertex(1)->point());
-	pushEdge(edges, 0,2,&firstFace->vertex(0)->point(), &firstFace->vertex(2)->point());
-	pushEdge(edges, 1,2,&firstFace->vertex(1)->point(), &firstFace->vertex(2)->point());
+		    TriangleStruct * first = new TriangleStruct;
 
-	// push neighbors that were not visited and are not constrained
-	pushNeighbors(TriQueue, firstFace, CT);
+		    first->currFace=incidentFaces;
+
+		    first->first = true;
+
+		    TriQueue.push(first);
+
+		    count++;
+
+	   }
+
+   } while (++incidentFaces!=firstFace);
 
    std::cout<<"added first face!"<<endl;
 
@@ -368,12 +373,22 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 
     	temp->currFace->info() = "visited";
 
-		pushNeighbors(TriQueue, temp, CT);
-
-		// according to the virtices in the previous face
 		pushUnhandeledVerticesAndEdges(temp, vertices, vertices_to_index, edges);
+
+		pushNeighbors(TriQueue, temp, CT);
     }
 
+	Point_2 startPoint(start.x(), start.y());
+	Point_2 endPoint(end.x(), end.y());
+	cout << "start key" << getKey(&endPoint) << endl;	
+	unordered_map<string,int>::const_iterator sourceIt = vertices_to_index.find(getKey(&startPoint));
+	unordered_map<string,int>::const_iterator targetIt = vertices_to_index.find(getKey(&endPoint));
+
+
+	int source = sourceIt->second;
+	int target = targetIt -> second;
+	cout << " source" << source << endl;
+	cout << " target" << source << endl;
 
 	// construct graph array repressentation
 	int vertices_count = vertices.size();
@@ -389,6 +404,18 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
 		graph[e.v1][e.v2] = e.dist;
 		graph[e.v2][e.v1] = e.dist;
 	}
+
+	cout << "vertices size " << vertices_count << endl;
+	cout << "edges size " << edges.size() << endl;
+	for ( auto it = vertices_to_index.begin(); it != vertices_to_index.end(); ++it )
+		std::cout << " " << it->first << ":" << it->second;
+	std::cout << std::endl;
+
+	char* path = dijsktra(graph, vertices_count,source,target);
+
+	// go through the path and create a vector of points.
+	// translate indexes in path using the vertices vector
+	//TODO  
 
 //    return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
 }
