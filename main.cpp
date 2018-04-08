@@ -97,60 +97,148 @@ void pushUnhandeledVerticesAndEdges(TriangleStruct * triangle, vector<Point_2> &
 	pushEdge(edges, vertices_index[2], vertices_index[1], &vertices_points[2], &vertices_points[1]);
 }
 
-char* dijsktra(double** cost, int size, int source,int target)
-{
-    int i,m,min,start,d,j;
-	double* dist = (double*)calloc(size, sizeof(double));
-	int* prev = (int*) calloc(size, sizeof(int));
-    int* selected = (int*) calloc(size, sizeof(int));
-	char* path = (char*) calloc(size, sizeof(char));
-	int N = size;
-	double IN = numeric_limits<double>::max();
+// vector<int> dijsktra(double** cost, int size, int source,int target)
+// {
+//     int i,m,min,start,d;
+// 	double* dist = (double*)calloc(size, sizeof(double));
+// 	int* prev = (int*) calloc(size, sizeof(int));
+//     int* selected = (int*) calloc(size, sizeof(int));
+// 	vector<int> path;
+// 	int N = size;
+// 	double IN = numeric_limits<double>::max();
 
-    for(i=1;i< N;i++)
-    {
-        dist[i] = IN;
-        prev[i] = -1;
-    }
-    start = source;
-    selected[start]=1;
-    dist[start] = 0;
-    while(selected[target] ==0)
-    {
-        min = IN;
-        m = 0;
-        for(i=1;i< N;i++)
-        {
-            d = dist[start] +cost[start][i];
-            if(d< dist[i]&&selected[i]==0)
-            {
-                dist[i] = d;
-                prev[i] = start;
-            }
-            if(min>dist[i] && selected[i]==0)
-            {
-                min = dist[i];
-                m = i;
-            }
-        }
-        start = m;
-        selected[start] = 1;
-    }
-    start = target;
-    j = 0;
-    while(start != -1)
-    {
-        path[j++] = start+65;
-        start = prev[start];
-    }
-    path[j]='\0';
-	cout << "PATHHHH " << path << endl;
+//     for(i=0;i< N;i++)
+//     {
+//         dist[i] = IN;
+//         prev[i] = -1;
+//     }
+//     start = source;
+//     selected[start]=1;
+//     dist[start] = 0;
+//     while(selected[target] ==0)
+//     {
+// 		cout << " dijkstra iteration " << endl;
+//         min = IN;
+//         m = 0;
+//         for(i=0;i< N;i++)
+//         {
+//             d = dist[start] +cost[start][i];
+//             if(d< dist[i]&&selected[i]==0)
+//             {
+//                 dist[i] = d;
+// 				cout << "prev of " << i << " is " << start << endl;
+//                 prev[i] = start;
+//             }
+//             if(min>dist[i] && selected[i]==0)
+//             {
+//                 min = dist[i];
+//                 m = i;
+//             }
+//         }
+//         start = m;
+//         selected[start] = 1;
+//     }
+
+// 	cout << " dijkstra search ended " << endl;
+
+//     start = target;
+    
+// 	cout << "start " << start << endl;
+// 	cout << "prev[start] " << prev[start] << endl;
+// 	// retrieve path
+//     while(start != -1)
+//     {
+//         path.push_back(start);
+//         start = prev[start];
+//     }
+
+// 	free(dist);
+// 	free(prev);
+// 	free(selected);
+
+//     return path;
+// }
+
+int minDistance(double* dist, bool* sptSet, int V)
+{
+   // Initialize min value
+   double min = numeric_limits<double>::max();
+   int min_index;
+  
+   for (int v = 0; v < V; v++)
+     if (sptSet[v] == false && dist[v] <= min)
+         min = dist[v], min_index = v;
+  
+   return min_index;
+}
+  
+// A utility function to print the constructed distance array
+// int printSolution(double* dist, int n)
+// {
+//    printf("Vertex   Distance from Source\n");
+//    for (int i = 0; i < V; i++)
+//       printf("%d tt %d\n", i, dist[i]);
+// }
+  
+// Funtion that implements Dijkstra's single source shortest path algorithm
+// for a graph represented using adjacency matrix representation
+vector<int> dijkstra(double** graph, int V, int src, int target)
+{
+	vector<int> path;
+	double MAX = numeric_limits<double>::max();
+    double* dist = (double*) calloc(V, sizeof(double));     // The output array.  dist[i] will hold the shortest
+                      // distance from src to i
+  
+    bool* sptSet = (bool*) calloc(V, sizeof(bool)); // sptSet[i] will true if vertex i is included in shortest
+                     // path tree or shortest distance from src to i is finalized
+
+	int* prev = (int*) calloc(V, sizeof(int));
+  
+     // Initialize all distances as INFINITE and stpSet[] as false
+     for (int i = 0; i < V; i++)
+        dist[i] = MAX, sptSet[i] = false, prev[i]=-1;
+  
+     // Distance of source vertex from itself is always 0
+     dist[src] = 0;
+  
+     // Find shortest path for all vertices
+     for (int count = 0; count < V-1; count++)
+     {
+       // Pick the minimum distance vertex from the set of vertices not
+       // yet processed. u is always equal to src in first iteration.
+       int u = minDistance(dist, sptSet, V);
+  
+       // Mark the picked vertex as processed
+       sptSet[u] = true;
+  
+       // Update dist value of the adjacent vertices of the picked vertex.
+       for (int v = 0; v < V; v++)
+  
+         // Update dist[v] only if is not in sptSet, there is an edge from 
+         // u to v, and total weight of path from src to  v through u is 
+         // smaller than current value of dist[v]
+         if (!sptSet[v] && graph[u][v] && dist[u] != MAX 
+                                       && dist[u]+graph[u][v] < dist[v]) {
+            dist[v] = dist[u] + graph[u][v];
+			prev[v] = u;
+		}							   
+     }
+
+	int vertex = target;
+	while(vertex != -1) {
+		cout << " path " << vertex << endl;
+		path.push_back(vertex);
+		vertex = prev[vertex];
+	}
 
 	free(dist);
+	free(sptSet);
 	free(prev);
-	free(selected);
 
-    return path;
+	return path;
+  
+     // print the constructed distance array
+    //  printSolution(dist, V);
 }
 
 
@@ -418,20 +506,21 @@ std::queue<TriangleStruct *> TriQueue;
 
 		pushUnhandeledVerticesAndEdges(temp, vertices, vertices_to_index, edges);
 
-		pushNeighbors(TriQueue, temp, CT);
+		// pushNeighbors(TriQueue, temp, CT);
     }
 
 	Point_2 startPoint(start.x(), start.y());
 	Point_2 endPoint(end.x(), end.y());
-	cout << "start key" << getKey(&endPoint) << endl;	
+	cout << "start key : " << getKey(&startPoint) << endl;
+	cout << "end key : " << getKey(&endPoint) << endl;	
 	unordered_map<string,int>::const_iterator sourceIt = vertices_to_index.find(getKey(&startPoint));
 	unordered_map<string,int>::const_iterator targetIt = vertices_to_index.find(getKey(&endPoint));
 
 
 	int source = sourceIt->second;
 	int target = targetIt -> second;
-	cout << " source" << source << endl;
-	cout << " target" << source << endl;
+	cout << " source index : " << source << endl;
+	cout << " target index : " << target << endl;
 
 	// construct graph array repressentation
 	int vertices_count = vertices.size();
@@ -439,7 +528,11 @@ std::queue<TriangleStruct *> TriQueue;
 	for(int i=0; i<vertices_count;i++) {
 		graph[i] = (double*) calloc(vertices_count, sizeof(double));
 		for(int j = 0; j < vertices_count; j++)
-			graph[i][j] = numeric_limits<double>::max();
+			if(i == j)
+				graph[i][j] = 0;
+			else {
+				graph[i][j] = numeric_limits<double>::max();
+			}
 	}
 
 	for(int i=0; i<edges.size(); i++) {
@@ -448,18 +541,37 @@ std::queue<TriangleStruct *> TriQueue;
 		graph[e.v2][e.v1] = e.dist;
 	}
 
+	for(int i=0; i<vertices_count; i++) {
+		for(int j=i+1; j < vertices_count; j++)
+			if(graph[i][j] != numeric_limits<double>::max())
+				cout << " graph[" << i << " , " << j << "] : " << graph[i][j] << " | ";
+
+		cout << endl;
+	}
+
 	cout << "vertices size " << vertices_count << endl;
 	cout << "edges size " << edges.size() << endl;
-	for ( auto it = vertices_to_index.begin(); it != vertices_to_index.end(); ++it )
-		std::cout << " " << it->first << ":" << it->second;
-	std::cout << std::endl;
+	// for ( auto it = vertices_to_index.begin(); it != vertices_to_index.end(); ++it )
+	// 	std::cout << " " << it->first << ":" << it->second << endl;
+	// std::cout << std::endl;
 
-	char* path = dijsktra(graph, vertices_count,source,target);
+	cout << "START DIJSTRA... " << endl;
+	vector<int> path = dijkstra(graph, vertices_count,source,target);
+	cout << "PATH LENGTH " << path.size() << endl;
 
 	// go through the path and create a vector of points.
 	// translate indexes in path using the vertices vector
-	//TODO  
+	vector<Point_2> ret;
 
+	cout << "PATH: " << endl;
+	for(int i=path.size()-1; i>=0 ; i--) {
+		int vertex_index = path[i];
+		Point_2 p = vertices[vertex_index];
+		ret.push_back(p);
+		cout << getKey(&p) << endl;
+	}
+
+	return ret;
 //    return vector<Point_2>({start,{1.71,5.57},{23.84,5.94},{21.21,29.17}, end});
 }
 
