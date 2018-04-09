@@ -366,76 +366,96 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     CT.insert_constraint(Point_2(Xmax*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymax*1.2));
     CT.insert_constraint(Point_2(Xmin*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymin*1.2));
 
-    //wrap
+	//Point_2 maxPoint = Point_2(Xmax*1.1,Ymax*1.1);
 
-    std::ofstream myFile;
-    std::ifstream Template;
-	std::string line;
+	//auto outerVertex = CT.insert(maxPoint);
 
-    Template.open("ipe2.xml");
-    myFile.open("Ipe.xml");
-
-
-    while (std::getline(Template,line)) {
-    	myFile <<line<<"\n";
-    }
-
-    myFile << "<page>\n";
-
-    for (auto i=CT.finite_vertices_begin(); i!=CT.finite_vertices_end(); i++) {
-    myFile << "<use name=\"mark/disk(sx)\" " << "pos= \"" << i->point().x().to_double() << " " << i->point().y().to_double() << "\" size=\"normal\" stroke=\"black\"/>\n";
-    }
-
-    for (auto i = CT.finite_faces_begin(); i!=CT.finite_faces_end(); i++) {
-
-    double p1x = i->vertex(0)->point().x().to_double(); double p1y = i->vertex(0)->point().y().to_double();
-
-    double p2x = i->vertex(1)->point().x().to_double(); double p2y = i->vertex(1)->point().y().to_double();
-
-    myFile << "<path stroke = \"black\"> \n"  << p1x <<" "<<p1y<<" m \n" << p2x <<" "<<p2y<< " l \n" << "</path> \n";
-
-     p1x = i->vertex(1)->point().x().to_double();  p1y = i->vertex(1)->point().y().to_double();
-
-     p2x = i->vertex(2)->point().x().to_double();  p2y = i->vertex(2)->point().y().to_double();
-
-     myFile << "<path stroke = \"black\"> \n"  << p1x <<" "<<p1y<<" m \n" << p2x <<" "<<p2y<< " l \n" << "</path> \n";
-
-     p1x = i->vertex(2)->point().x().to_double();  p1y = i->vertex(2)->point().y().to_double();
-
-     p2x = i->vertex(0)->point().x().to_double();  p2y = i->vertex(0)->point().y().to_double();
-
-     myFile << "<path stroke = \"black\"> \n"  << p1x <<" "<<p1y<<" m \n" << p2x <<" "<<p2y<< " l \n" << "</path> \n";
-
-    }
-    myFile << "</page>\n";
-    myFile << "</ipe>\n";
-    myFile.close();
-
-
-
-
-    std::cout<<"created triangulation\n";
-
-    ConstrainedTriangulation::Face_handle f;
+   	   std::cout<<"test";
 
 
 	// Dijkstra : build graph
    vector<Point_2> vertices;
    unordered_map<string, int> vertices_to_index = {};
    vector<Edge> edges;
-   
+
+   	   std::cout<<"test";
+
 
 std::queue<TriangleStruct *> TriQueue;
 
-   auto incidentFaces = vs->incident_faces();
+	//go through all triangles reachable by edge of bounding box, and mark them as "outside"	
 
-   auto firstFace = incidentFaces;
+	   std::cout<<"test";
 
+	   auto incidentFaces = vs->incident_faces();
+
+	   std::cout<<"test";
+
+   	   auto firstFace = incidentFaces;
+/*
+   do {
+
+	   if (!CT.is_infinite(incidentFaces)) {
+
+		    TriangleStruct * first = new TriangleStruct;
+
+		    TriQueue.push(first);
+	   }
+
+   } while (++incidentFaces!=firstFace);
+
+    while (!TriQueue.empty()) {
+
+        TriangleStruct * temp;
+
+    	temp = TriQueue.front();
+    	TriQueue.pop();
+
+    	temp->currFace->info() = "outside";
+
+
+    	if ( !(CT.is_infinite(temp->currFace->neighbor(0))) && !(temp->currFace->is_constrained(0)) && !(temp->currFace ->neighbor(0)->info()=="outside")) {
+
+
+    		TriangleStruct* temp2 = new TriangleStruct;
+    		temp2->currFace = temp->currFace->neighbor(0);
+    		temp2->t = temp;
+			TriQueue.push(temp2);
+
+    	}
+
+    	if (!(CT.is_infinite(temp->currFace->neighbor(1))) && !(temp->currFace->is_constrained(1)) && !(temp->currFace ->neighbor(1)->info()=="outside")) {
+
+            TriangleStruct* temp2 = new TriangleStruct;
+
+    		temp2->currFace = temp->currFace->neighbor(1);
+    		temp2->t = temp;
+			TriQueue.push(temp2);
+
+    	}
+    	if (!(temp->currFace->is_constrained(2)) && !(temp->currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp->currFace->neighbor(2)))) {
+
+            TriangleStruct* temp2 = new TriangleStruct;
+
+    		temp2->currFace = temp->currFace->neighbor(2);
+    		temp2->t = temp;
+			TriQueue.push(temp2);
+
+		}
+		
+		delete(temp);
+
+	}
+
+    incidentFaces = vs->incident_faces();
+
+    firstFace = incidentFaces;
+*/
    int count=0;
 
    do {
 
-	   if (!CT.is_infinite(incidentFaces)) {
+	   if (!CT.is_infinite(incidentFaces) && !(incidentFaces->info()=="outside")) {
 
 		    TriangleStruct * first = new TriangleStruct;
 
