@@ -142,7 +142,7 @@ void pushUnhandeledVerticesAndEdges(TriangleStruct * triangle, vector<Point_2> &
 // 	cout << " dijkstra search ended " << endl;
 
 //     start = target;
-    
+
 // 	cout << "start " << start << endl;
 // 	cout << "prev[start] " << prev[start] << endl;
 // 	// retrieve path
@@ -164,14 +164,14 @@ int minDistance(double* dist, bool* sptSet, int V)
    // Initialize min value
    double min = numeric_limits<double>::max();
    int min_index;
-  
+
    for (int v = 0; v < V; v++)
      if (sptSet[v] == false && dist[v] <= min)
          min = dist[v], min_index = v;
-  
+
    return min_index;
 }
-  
+
 // A utility function to print the constructed distance array
 // int printSolution(double* dist, int n)
 // {
@@ -179,7 +179,7 @@ int minDistance(double* dist, bool* sptSet, int V)
 //    for (int i = 0; i < V; i++)
 //       printf("%d tt %d\n", i, dist[i]);
 // }
-  
+
 // Funtion that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
 vector<int> dijkstra(double** graph, int V, int src, int target)
@@ -188,45 +188,44 @@ vector<int> dijkstra(double** graph, int V, int src, int target)
 	double MAX = numeric_limits<double>::max();
     double* dist = (double*) calloc(V, sizeof(double));     // The output array.  dist[i] will hold the shortest
                       // distance from src to i
-  
+
     bool* sptSet = (bool*) calloc(V, sizeof(bool)); // sptSet[i] will true if vertex i is included in shortest
                      // path tree or shortest distance from src to i is finalized
 
 	int* prev = (int*) calloc(V, sizeof(int));
-  
+
      // Initialize all distances as INFINITE and stpSet[] as false
      for (int i = 0; i < V; i++)
         dist[i] = MAX, sptSet[i] = false, prev[i]=-1;
-  
+
      // Distance of source vertex from itself is always 0
      dist[src] = 0;
-  
+
      // Find shortest path for all vertices
      for (int count = 0; count < V-1; count++)
      {
        // Pick the minimum distance vertex from the set of vertices not
        // yet processed. u is always equal to src in first iteration.
        int u = minDistance(dist, sptSet, V);
-  
+
        // Mark the picked vertex as processed
        sptSet[u] = true;
-  
+
        // Update dist value of the adjacent vertices of the picked vertex.
        for (int v = 0; v < V; v++)
-  
-         // Update dist[v] only if is not in sptSet, there is an edge from 
-         // u to v, and total weight of path from src to  v through u is 
+
+         // Update dist[v] only if is not in sptSet, there is an edge from
+         // u to v, and total weight of path from src to  v through u is
          // smaller than current value of dist[v]
-         if (!sptSet[v] && graph[u][v] && dist[u] != MAX 
+         if (!sptSet[v] && graph[u][v] && dist[u] != MAX
                                        && dist[u]+graph[u][v] < dist[v]) {
             dist[v] = dist[u] + graph[u][v];
 			prev[v] = u;
-		}							   
+		}
      }
 
 	int vertex = target;
 	while(vertex != -1) {
-		cout << " path " << vertex << endl;
 		path.push_back(vertex);
 		vertex = prev[vertex];
 	}
@@ -236,7 +235,7 @@ vector<int> dijkstra(double** graph, int V, int src, int target)
 	free(prev);
 
 	return path;
-  
+
      // print the constructed distance array
     //  printSolution(dist, V);
 }
@@ -275,7 +274,6 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     Transformation translate(CGAL::TRANSLATION,delta);
     tempRobot = transform(translate, robot);
 
-    cout<<"done translation"<<endl;
 
     for (Polygon_2::Vertex_iterator vi = tempRobot.vertices_begin(); vi != tempRobot.vertices_end(); ++vi) {
         Kernel::FT x = vi->x(), y = vi->y();
@@ -283,26 +281,11 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
         minus_robot.push_back(minus_vertex);
     }
 
-    cout<<"Minus_robot: "<<endl;
 
     minus_robot.reverse_orientation();
 
-    for (auto i=minus_robot.vertices_begin(); i!=minus_robot.vertices_end(); i++) {
-
-    	 cout<<*i<<endl;
-
-    }
-    cout<<"Minus_robot: "<<endl;
-
     int obstacles_size = obstacles.size();
 
-    if (obstacles[0].orientation()==minus_robot.orientation()) {
-    	if (minus_robot.orientation()==CGAL::COUNTERCLOCKWISE) {
-    	std::cout<<"Polygons have same orientation (CounterClockWise) "<<endl;
-    	} else if (minus_robot.orientation()==CGAL::CLOCKWISE) {
-    	std::cout<<"Polygons have same orientation (ClockWise) "<<endl;
-    	}
-    }
 
     // minkowsky sum = calc c-obstacles arrangement
     //Meanwhile , build a constrained triangulation - c-obstacles are the constraints
@@ -311,9 +294,7 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     	obstacles[i].reverse_orientation();
         Polygon_with_holes_2  c_obstacle_with_hole  = minkowski_sum_2(minus_robot,obstacles[i]);
     //    CGAL_assertion (c_obstacle_with_hole.number_of_holes() == 0);
-    	cout<<"calculating minkowski sum"<<endl;
         Polygon_2 c_obstacle = c_obstacle_with_hole.outer_boundary();
-        std::cout<<"Calculated Minkowski sum of "<<i<<" obstacle" <<endl;
         for (Polygon_2::Edge_const_iterator ei = c_obstacle.edges_begin(); ei != c_obstacle.edges_end(); ++ei) {
         //	for (Polygon_2::Edge_const_iterator ei = obstacles[i].edges_begin(); ei != obstacles[i].edges_end(); ++ei) {
         	std::cout<<ei->source()<<" ; "<<ei->target()<<endl;
@@ -321,7 +302,6 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
         	Point_2 trgt = Point_2(ei->target().x(),ei->target().y());
         	CT.insert_constraint(src,trgt);
         	}
-        std::cout<<"Added constrains of "<<i<<" obstacle" <<endl;
     }
 
 
@@ -366,96 +346,67 @@ vector<Point_2> findPath(const Point_2 &start, const Point_2 &end, const Polygon
     CT.insert_constraint(Point_2(Xmax*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymax*1.2));
     CT.insert_constraint(Point_2(Xmin*1.2,Ymin*1.2),Point_2(Xmax*1.2,Ymin*1.2));
 
-	//Point_2 maxPoint = Point_2(Xmax*1.1,Ymax*1.1);
+	Point_2 maxPoint = Point_2(Xmax*1.1,Ymax*1.1);
 
-	//auto outerVertex = CT.insert(maxPoint);
-
-   	   std::cout<<"test";
-
+	auto outerVertex = CT.insert(maxPoint);
 
 	// Dijkstra : build graph
    vector<Point_2> vertices;
    unordered_map<string, int> vertices_to_index = {};
    vector<Edge> edges;
 
-   	   std::cout<<"test";
-
 
 std::queue<TriangleStruct *> TriQueue;
 
-	//go through all triangles reachable by edge of bounding box, and mark them as "outside"	
+	//go through all triangles reachable by edge of bounding box, and mark them as "outside"
 
-	   std::cout<<"test";
-
-	   auto incidentFaces = vs->incident_faces();
-
-	   std::cout<<"test";
+	   auto incidentFaces = outerVertex->incident_faces();
 
    	   auto firstFace = incidentFaces;
-/*
+
    do {
-
 	   if (!CT.is_infinite(incidentFaces)) {
-
 		    TriangleStruct * first = new TriangleStruct;
-
+		    first->currFace = incidentFaces;
 		    TriQueue.push(first);
 	   }
-
    } while (++incidentFaces!=firstFace);
-
     while (!TriQueue.empty()) {
-
         TriangleStruct * temp;
-
     	temp = TriQueue.front();
     	TriQueue.pop();
-
     	temp->currFace->info() = "outside";
-
-
     	if ( !(CT.is_infinite(temp->currFace->neighbor(0))) && !(temp->currFace->is_constrained(0)) && !(temp->currFace ->neighbor(0)->info()=="outside")) {
-
-
     		TriangleStruct* temp2 = new TriangleStruct;
     		temp2->currFace = temp->currFace->neighbor(0);
     		temp2->t = temp;
 			TriQueue.push(temp2);
-
     	}
-
     	if (!(CT.is_infinite(temp->currFace->neighbor(1))) && !(temp->currFace->is_constrained(1)) && !(temp->currFace ->neighbor(1)->info()=="outside")) {
-
             TriangleStruct* temp2 = new TriangleStruct;
-
     		temp2->currFace = temp->currFace->neighbor(1);
     		temp2->t = temp;
 			TriQueue.push(temp2);
-
     	}
-    	if (!(temp->currFace->is_constrained(2)) && !(temp->currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp->currFace->neighbor(2)))) {
-
+    	if (!(temp->currFace->is_constrained(2)) && !(temp->currFace ->neighbor(2)->info()=="outside") && !(CT.is_infinite(temp->currFace->neighbor(2)))) {
             TriangleStruct* temp2 = new TriangleStruct;
-
     		temp2->currFace = temp->currFace->neighbor(2);
     		temp2->t = temp;
 			TriQueue.push(temp2);
-
 		}
-		
-		delete(temp);
 
+		delete(temp);
 	}
 
-    incidentFaces = vs->incident_faces();
+    //Beginning from starting vertex - traverse all triangles legal triangles, which will form the path graph
 
+
+    incidentFaces = vs->incident_faces();
     firstFace = incidentFaces;
-*/
-   int count=0;
 
    do {
 
-	   if (!CT.is_infinite(incidentFaces) && !(incidentFaces->info()=="outside")) {
+	   if (!CT.is_infinite(incidentFaces) && (incidentFaces->info()=="outside")) {
 
 		    TriangleStruct * first = new TriangleStruct;
 
@@ -465,13 +416,10 @@ std::queue<TriangleStruct *> TriQueue;
 
 		    TriQueue.push(first);
 
-		    count++;
 
 	   }
 
    } while (++incidentFaces!=firstFace);
-
-   std::cout<<"added first face!"<<endl;
 
     while (!TriQueue.empty()) {
 
@@ -485,8 +433,6 @@ std::queue<TriangleStruct *> TriQueue;
 
     	if ( !(CT.is_infinite(temp->currFace->neighbor(0))) && !(temp->currFace->is_constrained(0)) && !(temp->currFace ->neighbor(0)->info()=="visited")) {
 
-    	cout<<"checking face 1"<<endl;
-
     		TriangleStruct* temp2 = new TriangleStruct;
     		temp2->currFace = temp->currFace->neighbor(0);
     		temp2->t = temp;
@@ -498,8 +444,6 @@ std::queue<TriangleStruct *> TriQueue;
 
     	if (!(CT.is_infinite(temp->currFace->neighbor(1))) && !(temp->currFace->is_constrained(1)) && !(temp->currFace ->neighbor(1)->info()=="visited")) {
 
-    		cout<<"checking face 2"<<endl;
-
             TriangleStruct* temp2 = new TriangleStruct;
 
     		temp2->currFace = temp->currFace->neighbor(1);
@@ -510,8 +454,6 @@ std::queue<TriangleStruct *> TriQueue;
 
     	}
     	if (!(temp->currFace->is_constrained(2)) && !(temp->currFace ->neighbor(2)->info()=="visited") && !(CT.is_infinite(temp->currFace->neighbor(2)))) {
-
-    		cout<<"checking face 3"<<endl;
 
             TriangleStruct* temp2 = new TriangleStruct;
 
@@ -532,7 +474,7 @@ std::queue<TriangleStruct *> TriQueue;
 	Point_2 startPoint(start.x(), start.y());
 	Point_2 endPoint(end.x(), end.y());
 	cout << "start key : " << getKey(&startPoint) << endl;
-	cout << "end key : " << getKey(&endPoint) << endl;	
+	cout << "end key : " << getKey(&endPoint) << endl;
 	unordered_map<string,int>::const_iterator sourceIt = vertices_to_index.find(getKey(&startPoint));
 	unordered_map<string,int>::const_iterator targetIt = vertices_to_index.find(getKey(&endPoint));
 
