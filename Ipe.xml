@@ -306,18 +306,18 @@ h
 <use name="mark/disk(sx)" pos= "419 81" size="normal" stroke="black"/>
 <use name="mark/disk(sx)" pos= "449 91" size="normal" stroke="black"/>
 <use name="mark/disk(sx)" pos= "428.276 84.0921" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "0 0" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "350 250" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-400 -400" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "493.9 320.1" size="normal" stroke="black"/>
 <use name="mark/disk(sx)" pos= "538.8 349.2" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "-360 349.2" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "538.8 -408" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos= "-360 -408" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-480 349.2" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "538.8 -480" size="normal" stroke="black"/>
+<use name="mark/disk(sx)" pos= "-480 -480" size="normal" stroke="black"/>
 <path stroke = "black"> 
 -150 200 m 
--360 349.2 l 
+-480 349.2 l 
 </path> 
 <path stroke = "black"> 
--360 349.2 m 
+-480 349.2 m 
 -300 100 l 
 </path> 
 <path stroke = "black"> 
@@ -373,16 +373,16 @@ h
 343.691 116.029 l 
 </path> 
 <path stroke = "black"> 
--360 349.2 m 
--300 -300 l 
+-480 349.2 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
--300 -300 m 
+-400 -400 m 
 -300 100 l 
 </path> 
 <path stroke = "black"> 
 -300 100 m 
--360 349.2 l 
+-480 349.2 l 
 </path> 
 <path stroke = "black"> 
 -220 -330 m 
@@ -565,16 +565,16 @@ h
 -82 60 l 
 </path> 
 <path stroke = "black"> 
--360 -408 m 
-538.8 -408 l 
+-300 -300 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
-538.8 -408 m 
+-400 -400 m 
 -260 -340 l 
 </path> 
 <path stroke = "black"> 
 -260 -340 m 
--360 -408 l 
+-300 -300 l 
 </path> 
 <path stroke = "black"> 
 -220 -330 m 
@@ -601,7 +601,7 @@ h
 18 51 l 
 </path> 
 <path stroke = "black"> 
-350 250 m 
+493.9 320.1 m 
 307 261 l 
 </path> 
 <path stroke = "black"> 
@@ -610,7 +610,7 @@ h
 </path> 
 <path stroke = "black"> 
 449 91 m 
-350 250 l 
+493.9 320.1 l 
 </path> 
 <path stroke = "black"> 
 49 161 m 
@@ -649,7 +649,7 @@ h
 -70 40 l 
 </path> 
 <path stroke = "black"> 
-0 0 m 
+0 -30 m 
 18 51 l 
 </path> 
 <path stroke = "black"> 
@@ -658,7 +658,7 @@ h
 </path> 
 <path stroke = "black"> 
 -82 60 m 
-0 0 l 
+0 -30 l 
 </path> 
 <path stroke = "black"> 
 -123.333 60 m 
@@ -721,16 +721,16 @@ h
 -123.333 60 l 
 </path> 
 <path stroke = "black"> 
--360 349.2 m 
--360 -408 l 
+-300 100 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
--360 -408 m 
+-400 -400 m 
 -300 -300 l 
 </path> 
 <path stroke = "black"> 
 -300 -300 m 
--360 349.2 l 
+-300 100 l 
 </path> 
 <path stroke = "black"> 
 -123.333 60 m 
@@ -818,10 +818,10 @@ h
 </path> 
 <path stroke = "black"> 
 -260 -340 m 
-538.8 -408 l 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
-538.8 -408 m 
+-400 -400 m 
 -250 -340 l 
 </path> 
 <path stroke = "black"> 
@@ -1297,7 +1297,7 @@ h
 252.193 1.95827 l 
 </path> 
 <path stroke = "black"> 
-538.8 -408 m 
+-400 -400 m 
 407 -119 l 
 </path> 
 <path stroke = "black"> 
@@ -1306,7 +1306,7 @@ h
 </path> 
 <path stroke = "black"> 
 -220 -330 m 
-538.8 -408 l 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
 429 91 m 
@@ -1321,7 +1321,7 @@ h
 429 91 l 
 </path> 
 <path stroke = "black"> 
-538.8 -408 m 
+538.8 -480 m 
 538.8 349.2 l 
 </path> 
 <path stroke = "black"> 
@@ -1330,7 +1330,7 @@ h
 </path> 
 <path stroke = "black"> 
 407 -119 m 
-538.8 -408 l 
+538.8 -480 l 
 </path> 
 <path stroke = "black"> 
 419 81 m 
@@ -1369,7 +1369,7 @@ h
 243.575 22.2842 l 
 </path> 
 <path stroke = "black"> 
-350 250 m 
+493.9 320.1 m 
 227 291 l 
 </path> 
 <path stroke = "black"> 
@@ -1378,10 +1378,10 @@ h
 </path> 
 <path stroke = "black"> 
 307 261 m 
-350 250 l 
+493.9 320.1 l 
 </path> 
 <path stroke = "black"> 
--360 349.2 m 
+-480 349.2 m 
 -150 200 l 
 </path> 
 <path stroke = "black"> 
@@ -1390,7 +1390,7 @@ h
 </path> 
 <path stroke = "black"> 
 227 291 m 
--360 349.2 l 
+-480 349.2 l 
 </path> 
 <path stroke = "black"> 
 307 261 m 
@@ -1585,28 +1585,28 @@ h
 409 81 l 
 </path> 
 <path stroke = "black"> 
-0 -30 m 
-0 0 l 
+-250 -340 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
-0 0 m 
--82 60 l 
+-400 -400 m 
+-220 -330 l 
 </path> 
 <path stroke = "black"> 
--82 60 m 
-0 -30 l 
+-220 -330 m 
+-250 -340 l 
 </path> 
 <path stroke = "black"> 
-0 -30 m 
-18 51 l 
+538.8 -480 m 
+407 -119 l 
 </path> 
 <path stroke = "black"> 
-18 51 m 
-0 0 l 
+407 -119 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
-0 0 m 
-0 -30 l 
+-400 -400 m 
+538.8 -480 l 
 </path> 
 <path stroke = "black"> 
 407 -119 m 
@@ -1626,10 +1626,10 @@ h
 </path> 
 <path stroke = "black"> 
 227 291 m 
-350 250 l 
+493.9 320.1 l 
 </path> 
 <path stroke = "black"> 
-350 250 m 
+493.9 320.1 m 
 538.8 349.2 l 
 </path> 
 <path stroke = "black"> 
@@ -1638,18 +1638,18 @@ h
 </path> 
 <path stroke = "black"> 
 538.8 349.2 m 
-350 250 l 
+493.9 320.1 l 
 </path> 
 <path stroke = "black"> 
-350 250 m 
+493.9 320.1 m 
 449 91 l 
 </path> 
 <path stroke = "black"> 
 538.8 349.2 m 
--360 349.2 l 
+-480 349.2 l 
 </path> 
 <path stroke = "black"> 
--360 349.2 m 
+-480 349.2 m 
 227 291 l 
 </path> 
 <path stroke = "black"> 
@@ -1657,28 +1657,28 @@ h
 538.8 349.2 l 
 </path> 
 <path stroke = "black"> 
--250 -340 m 
-538.8 -408 l 
+-480 -480 m 
+538.8 -480 l 
 </path> 
 <path stroke = "black"> 
-538.8 -408 m 
--220 -330 l 
+538.8 -480 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
--220 -330 m 
--250 -340 l 
+-400 -400 m 
+-480 -480 l 
 </path> 
 <path stroke = "black"> 
--300 -300 m 
--360 -408 l 
+-480 349.2 m 
+-480 -480 l 
 </path> 
 <path stroke = "black"> 
--360 -408 m 
--260 -340 l 
+-480 -480 m 
+-400 -400 l 
 </path> 
 <path stroke = "black"> 
--260 -340 m 
--300 -300 l 
+-400 -400 m 
+-480 349.2 l 
 </path> 
 </page>
 </ipe>
